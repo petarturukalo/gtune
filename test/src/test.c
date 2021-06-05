@@ -10,7 +10,7 @@
 int main(void)
 {
 	test_note_entry();
-	test_freq_entry();
+	/*test_freq_entry();*/
 	test_math_entry();
 	
 	return 0;

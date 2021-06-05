@@ -28,5 +28,4 @@ void test_nr_new_range(void)
 void test_math_entry(void)
 {
 	test_nr_new_range();
-	printf("foo\n");
 }
