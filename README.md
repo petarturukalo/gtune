@@ -1,6 +1,6 @@
 # Description
 
-A C guiter "tuner", but actually more of a monophonic guitar string note/frequency
+A C guitar "tuner", but actually more of a monophonic guitar string note/frequency
 tracker that can be used for tuning. It uses the default microphone and currently 
 doesn't bother handling not having an input audio device (mic). What can be customised
 are input parameters such as sample rate and chunk size, but not as command line
