@@ -14,4 +14,4 @@ clean:
 	rm gtune build/*.o
 
 ctags:
-	myctagslib -R . /usr/include/fftw3.h /usr/include/portaudio.h
+	myctags -R . /usr/include/fftw3.h /usr/include/portaudio.h
