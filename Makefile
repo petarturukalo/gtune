@@ -15,3 +15,6 @@ clean:
 
 ctags:
 	myctags -R . /usr/include/fftw3.h /usr/include/portaudio.h
+
+install:
+	cp -vf gtune /usr/local/bin
