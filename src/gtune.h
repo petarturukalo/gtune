@@ -33,7 +33,7 @@ typedef struct guitar_tuner gtune_t;
 
 /**
  * gtune_init - Initialise guitar tuner data
- * @sample_rate: number of samples recorded per second (Hz)
+ * @sample_rate: number of samples recorded per second
  * @chunksz: number of samples to both read and process per frequency calculation
  * @chunk_nsteps: a number >= 1 that determines the step size between frequency processes. 2 steps means
  *	that the whole of a chunk will be passed in 2 steps. A chunk size of 8192 and chunk steps of 2 gives
