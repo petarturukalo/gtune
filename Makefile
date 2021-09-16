@@ -1,20 +1,26 @@
-OBJS=build/main.o build/math.o build/freq.o build/mic.o build/win.o \
-     build/note.o build/gtune.o build/file.o build/hps.o build/sig.o
+srcs=$(shell find src -name "*.c" -print)
+objs=$(patsubst src/%.c, build/%.o, $(srcs))
 CC=gcc
 CFLAGS=-c
 LFLAGS=-lfftw3 -lm -lportaudio
 
-gtune: $(OBJS)
+gtune: $(objs)
 	$(CC) $(LFLAGS) $^ -o $@
 
-build/%.o: src/%.c
+# All header files reside in the same directory as its corresponding
+# .c file, but might not exist for some files, so use wildcard since it 
+# expands to nothing if it doesn't exist.
+.SECONDEXPANSION:
+build/%.o: src/%.c $$(wildcard src/%.h)
 	$(CC) $(CFLAGS) $< -o $@
+
 
 clean:
 	rm gtune build/*.o
 
-ctags:
-	myctags -R . /usr/include/fftw3.h /usr/include/portaudio.h
-
 install:
 	cp -vf gtune /usr/local/bin
+
+uninstall:
+	rm /usr/local/bin/gtune
+
