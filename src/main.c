@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "gtune.h"
 #include "sig.h"
+#include "err.h"
 
 gtune_t *g;
 
@@ -19,12 +20,15 @@ void cleanup(void)
 	gtune_cleanup(g);
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
+	err_set_prgname(argv[0]);
 	sig_block();
 
 	g = gtune_init(44100, 32768, 1, 20, 1500);
 
+	if (!g)
+		exit(EXIT_FAILURE);
 	atexit(cleanup);
 	sig_handle();
 

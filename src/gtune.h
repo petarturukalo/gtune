@@ -42,8 +42,8 @@ typedef struct guitar_tuner gtune_t;
  *	processed chunk and the first half of the next read chunk, and again on the next next process will be
  *	the whole of the next chunk. This is to allow for a faster refresh rate, since, for example with
  *	a step of 2 there will be 2 prints per chunk process, using overlapping parts of the chunks.
- * @min_valid_freq: minimum valid frequency (exclusive) that is considered a note. 
- * @max_valid_freq: maximum valid frequency (exclusive) that is considered a note
+ * @min_valid_freq: minimum valid frequency (inclusive) that is considered a note. 
+ * @max_valid_freq: maximum valid frequency (inclusive) that is considered a note
  *
  * The accuracy of a reading is calculated by sample_rate/chunksz. This means that for a sample rate of
  * 44100 Hz and chunk size of 8192, the accuracy is 44100/8192 ~= 5.38, which has that while tuning up from
@@ -57,6 +57,8 @@ typedef struct guitar_tuner gtune_t;
  * 1.02 seconds. This can be "offset" by making chunk_nsteps greater than 1 - making it 2 with an initial
  * refresh rate of 1.02 seconds will have it refresh at 1.02/2 = 0.51 seconds, but what's displayed might
  * not be of much extra help since it's still going off the the same samples, just overlapping the chunks it has.
+ *
+ * Return NULL on error.
  */
 gtune_t *gtune_init(int sample_rate, int chunksz, int chunk_nsteps, double min_valid_freq, double max_valid_freq);
 

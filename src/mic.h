@@ -12,6 +12,7 @@
 #include <portaudio.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "err.h"
 
 struct microphone {
 	PaStream *stream;

@@ -54,7 +54,6 @@ static int process_chunk(fdata_t *f, fftw_plan p, void *samples, void (*conv)(vo
 	// Generate normalised values, floating point numbers in range -1 to 1, 
 	// which are input for FFT.
 	conv(samples, f->norm, f->chunksz);
-
 	// Preprocess the values further for better and more accurate frequency results.
 	hanning_window(f->norm, f->chunksz);
 
