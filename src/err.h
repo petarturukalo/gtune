@@ -10,9 +10,6 @@
 
 #include <stdio.h>
 
-// Program name.
-extern char *prgname;
-
 /**
  * err_set_prgname - Set the program name so that it shows up
  *	in susbsequent print calls to err_print
