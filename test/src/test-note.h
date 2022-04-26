@@ -11,7 +11,7 @@
 #include <assert.h>
 #include "../../src/note.h"
 
-/**
+/*
  * test_note_entry - Entry point for testing musical note calcs
  */
 void test_note_entry(void);

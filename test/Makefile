@@ -1,7 +1,7 @@
 # TODO automate collecting object files instead of listing
-OBJS=build/test.o build/test-note.o build/test-freq.o build/test-math.o
+OBJS=build/test.o build/test-note.o build/test-math.o
 # Objects from main source.
-MOBJS=../build/note.o ../build/freq.o ../build/win.o ../build/math.o \
+MOBJS=../build/note.o ../build/win.o ../build/math.o \
       ../build/file.o ../build/hps.o
 CC=gcc
 CFLAGS=-c -g

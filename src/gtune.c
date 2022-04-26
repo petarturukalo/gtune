@@ -17,12 +17,10 @@ static int chunk_stepsz(int chunksz, int nsteps)
 	return chunksz/nsteps;
 }
 
-gtune_t *gtune_init(int sample_rate, int chunksz, int chunk_nsteps, 
-		    double min_valid_freq, double max_valid_freq)
+void gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, 
+		double min_valid_freq, double max_valid_freq)
 {
-	gtune_t *g = malloc(sizeof(gtune_t));
-
-	g->freq = fdata_init(sample_rate, chunksz);
+	fdata_init(&g->freq, sample_rate, chunksz);
 
 	g->min_valid_freq = min_valid_freq;
 	g->max_valid_freq = max_valid_freq;
@@ -33,24 +31,21 @@ gtune_t *gtune_init(int sample_rate, int chunksz, int chunk_nsteps,
 	g->mic = mic_init(sample_rate, g->chunk_stepsz);
 
 	if (!g->mic) {
-		fdata_free(g->freq);
-		free(g);
-		return NULL;
+		fdata_free(&g->freq);
+		return;
 	}
 
-	g->note = note_alloc();
+	// Fill with spaces so that its displayed width becomes MAX_NOTE_LEN, as otherwise 
+	// without if it's filled with null-termination characters its display width is 0.
+	memset(g->note, ' ', MAX_NOTE_LEN);  
 	g->samples = malloc(g->chunksz*sizeof(float));
-
-	return g;
 }
 
 void gtune_cleanup(gtune_t *g)
 {
 	free(g->samples);
-	free(g->note);
 	mic_cleanup(g->mic);
-	fdata_free(g->freq);
-	free(g);
+	fdata_free(&g->freq);
 }
 
 static void print_header(void)
@@ -75,8 +70,8 @@ static void gtune_freq(gtune_t *g, float *samples)
 {
 	double note_freq;
 
-	fdata_process_chunk_float32_preprocd(g->freq, samples);
-	note_freq = fdata_frequency(g->freq);
+	fdata_process_chunk_float32_preprocd(&g->freq, samples);
+	note_freq = fdata_frequency(&g->freq);
 
 	if (note_freq >= g->min_valid_freq && note_freq <= g->max_valid_freq)
 		note_from_freq(note_freq, g->note);

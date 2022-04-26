@@ -16,7 +16,6 @@
 
 struct microphone {
 	PaStream *stream;
-	float *samples;
 };
 
 typedef struct microphone mic_t;

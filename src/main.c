@@ -10,14 +10,14 @@
 #include "sig.h"
 #include "err.h"
 
-gtune_t *g;
+gtune_t g;
 
 /*
  * cleanup - Clean up the program at exit
  */
 void cleanup(void)
 {
-	gtune_cleanup(g);
+	gtune_cleanup(&g);
 }
 
 int main(int argc, char *argv[])
@@ -25,14 +25,12 @@ int main(int argc, char *argv[])
 	err_set_prgname(argv[0]);
 	sig_block();
 
-	g = gtune_init(44100, 32768, 1, 20, 1500);
+	gtune_init(&g, 44100, 32768, 1, 20, 1500);
 
-	if (!g)
-		exit(EXIT_FAILURE);
 	atexit(cleanup);
 	sig_handle();
 
-	gtune_start(g);
+	gtune_start(&g);
 
 	return 0;
 }

@@ -18,9 +18,9 @@
 
 // All the data required by the guitar tuner.
 struct guitar_tuner {
-	fdata_t *freq;  // For converting audio input into frequencies.
+	fdata_t freq;  // For converting audio input into frequencies.
 	mic_t *mic;  // For audio input.
-	char *note;  // Frequency converted to a musical note.
+	char note[MAX_NOTE_LEN];  // Frequency converted to a musical note.
 	float *samples;  // Array to store read samples in.
 	double min_valid_freq;
 	double max_valid_freq;
@@ -60,7 +60,7 @@ typedef struct guitar_tuner gtune_t;
  *
  * Return NULL on error.
  */
-gtune_t *gtune_init(int sample_rate, int chunksz, int chunk_nsteps, double min_valid_freq, double max_valid_freq);
+void gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, double min_valid_freq, double max_valid_freq);
 
 /*
  * gtune_free - Clean up and free a guiter tuner allocated with gtune_init

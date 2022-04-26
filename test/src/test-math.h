@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "../../src/math.h"
 
-/**
+/*
  * test_math_entry - Entry point to testing math related
  *	functions
  */

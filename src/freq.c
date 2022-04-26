@@ -15,10 +15,8 @@ int nmag(int chunksz)
 	return chunksz/2;
 }
 
-fdata_t *fdata_init(int sample_rate, int chunksz)
+void fdata_init(fdata_t *f, int sample_rate, int chunksz)
 {
-	fdata_t *f = malloc(sizeof(fdata_t));
-
 	f->norm = malloc(chunksz*sizeof(double));
 	f->c = malloc(chunksz*sizeof(fftw_complex));
 	// This array could be combined with the normalised array to save space
@@ -32,8 +30,6 @@ fdata_t *fdata_init(int sample_rate, int chunksz)
 	f->p = fftw_plan_dft_r2c_1d(chunksz, f->norm, f->c, FFTW_MEASURE);
 	f->sample_rate = sample_rate;
 	f->chunksz = chunksz;
-
-	return f;
 }
 
 /*
@@ -56,9 +52,7 @@ static int process_chunk(fdata_t *f, fftw_plan p, void *samples, void (*conv)(vo
 	conv(samples, f->norm, f->chunksz);
 	// Preprocess the values further for better and more accurate frequency results.
 	hanning_window(f->norm, f->chunksz);
-
 	fftw_execute(p);
-
 	// Use output of FFT to prepare for calculating frequency on a subsequent 
 	// call to fdata_frequency.
 	magnitudes(f->c, f->mag, m);
@@ -119,103 +113,11 @@ void fdata_process_chunk_sint16(fdata_t *f, short *samples)
 	process_chunk(f, f->p, (void *)samples, conv_samples_sint16);
 }
 
-/*
- * nfull_chunks - Calculate the number of full chunks processed
- * @nsamps: total number of samples to process
- * @chunksz: number of samples to process at a time
- * @step: number of samples to move forward after each process
- */
-static int nfull_chunks(int nsamps, int chunksz, int step)
-{
-	int n = floor(((nsamps-chunksz)/step)+1);
-
-	if (n > 0)
-		return n;
-	return 0;
-}
-
-/*
- * npart_chunks - Calculate the number of part chunks processed
- * @nsamps: total number of samples to process
- * @nfull: number of full chunks processed over all the samples given the step size
- * @step: number of samples to move forward after each process
- */
-static int npart_chunks(int nsamps, int nfull, int step)
-{
-	return ceil((nsamps-nfull*step)/step);
-}
-
 double fdata_frequency(fdata_t *f)
 {
 	return frequency(f->sample_rate, f->maxi, f->chunksz);
 }
 
-/*
- * fdata_process_all - Process all samples chunk by chunk in one function call
- * @samples: samples to process cast to void pointer
- * @nsamps: total number of samples
- * @stepsz: number of samples to move along after each chunk process
- * @n: out-parameter to store the total number of chunks processed, also the length of
- *	the returned frequency array
- * @conv: see process_chunk
- * @samples_add_step: function which takes void pointer to current samples, casts it to the appropriate
- *	samples type, adds the integer step size to it, and then returns it but cast again back to
- *	void pointer
- */
-double *fdata_process_all(fdata_t *f, void *samples, int nsamps, int stepsz, int *n,
-			  void (*conv)(void *, double *, int), void *(*samples_add_step)(void *, int))
-{
-	// A full chunk is a chunk of size chunk size, and a part chunk is a chunk
-	// processed which is less than this size.
-	fftw_plan p;
-	int nfull, npart, nchunks, i, stepped;  
-	double *freqs;
-
-	nfull = nfull_chunks(nsamps, f->chunksz, stepsz);
-	npart = npart_chunks(nsamps, nfull, stepsz);
-	nchunks = nfull+npart;
-	freqs = malloc(nchunks*sizeof(double));
-	stepped = 0;
-
-	// Process full chunks using the frequency data's fftw plan since it's
-	// optimised for this size.
-	for (i = 0; i < nfull; ++i) {
-		process_chunk(f, f->p, (void *)samples, conv);
-		freqs[i] = fdata_frequency(f);
-
-		samples = samples_add_step(samples, stepsz);
-		stepped += stepsz;
-	}
-	// Revert to using an estimate fftw plan for all remaining partial chunks
-	// Using partial chunks at the end of the samples might be redundant because the 
-	// results don't ever seem to be good, and it probably has something to do with the
-	// sizing of the fftw plan, or something being wrong.
-	for (int j = 0; j < npart; ++i, ++j) {
-		p = fftw_plan_dft_r2c_1d(nsamps-stepped, f->norm, f->c, FFTW_ESTIMATE);
-
-		process_chunk(f, p, (void *)samples, conv);
-		freqs[i] = fdata_frequency(f);
-
-		fftw_destroy_plan(p);
-		samples = samples_add_step(samples, stepsz);
-		stepped += stepsz;
-	}
-	*n = nchunks;
-	return freqs;
-}
-
-void *samp_add_step_sint16(void *samples, int step)
-{
-	short *s = (short *)samples;
-	return (void *)(s+step);
-}
-
-double *fdata_process_all_sint16(fdata_t *f, short *samples, int nsamps, int stepsz, int *n)
-{
-	return fdata_process_all(f, (void *)samples, nsamps, stepsz, n, 
-				 conv_samples_sint16, samp_add_step_sint16);
-}
-			  
 void fdata_free(fdata_t *f)
 {
 	fftw_destroy_plan(f->p);
@@ -225,7 +127,5 @@ void fdata_free(fdata_t *f)
 	free(f->mag);
 	free(f->c);
 	free(f->norm);
-
-	free(f);
 }
 

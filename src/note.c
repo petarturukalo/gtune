@@ -15,24 +15,6 @@ static const char *NOTES[] = {
 	"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"
 };
 
-char *note_alloc(void)
-{
-	int i;
-	char *s = malloc((MAX_NOTE_LEN+1)*sizeof(char));
-
-	if (!s)
-		return NULL;
-
-	// Fill with character 0s rather than null termination (int 0s) so
-	// that it prints the same amount of characters as when it's filled
-	// with a note.
-	for (i = 0; i < MAX_NOTE_LEN; ++i)
-		s[i] = ' ';
-	s[i] = '\0';
-
-	return s;
-}
-
 /*
  * semitones_from_note - Get the number of semitones a note is away from another note
  * @freq: frequency of note
@@ -40,7 +22,7 @@ char *note_alloc(void)
  */
 static double semitones_from_note(double freq, double target_freq)
 {
-	return NNOTES*log2(freq/target_freq);
+       return NNOTES*log2(freq/target_freq);
 }
 
 /*
@@ -49,7 +31,7 @@ static double semitones_from_note(double freq, double target_freq)
  */
 static double semitones_from_base(double freq)
 {
-	return semitones_from_note(freq, BASE_NOTE_FREQ);
+       return semitones_from_note(freq, BASE_NOTE_FREQ);
 }
 
 /*
@@ -87,17 +69,13 @@ void note_from_freq(double freq, char *s)
 
 	note_ind = note_index(freq);
 	note = NOTES[note_ind];
-	n = strlen(note);
-	note_nr = note_number(freq, note, n);
+	note_nr = note_number(freq, note, strlen(note));
 
-	// Fill string with note name.
-	for (i = 0; i < n; ++i) 
-		s[i] = note[i];
+	bzero(s, MAX_NOTE_LEN);
+	strcat(s, note);  // Append note letter.
+	i = strlen(s);
 	s[i++] = '0'+note_nr;  // Append its number.
-
-	// Pad end with space to potentially remove what was 
-	// previously there.
 	if (i < MAX_NOTE_LEN)
-		s[i] = ' ';
+		s[i] = ' ';  // Pad with spaces so that "A0" and "A#0" (etc.) become the same width.
 }
 

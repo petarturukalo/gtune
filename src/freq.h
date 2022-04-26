@@ -37,7 +37,7 @@ typedef struct frequency_data fdata_t;
  *
  * Return NULL on error. Dynamically allocated, must be freed with fdata_free.
  */
-fdata_t *fdata_init(int sample_rate, int chunksz);
+void fdata_init(fdata_t *f, int sample_rate, int chunksz);
 
 /*
  * fdata_free - Free a frequency data initialised with fdata_init
