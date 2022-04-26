@@ -19,7 +19,7 @@
 // All the data required by the guitar tuner.
 struct guitar_tuner {
 	fdata_t freq;  // For converting audio input into frequencies.
-	mic_t *mic;  // For audio input.
+	mic_t mic;  // For audio input.
 	char note[MAX_NOTE_LEN];  // Frequency converted to a musical note.
 	float *samples;  // Array to store read samples in.
 	double min_valid_freq;
@@ -58,9 +58,10 @@ typedef struct guitar_tuner gtune_t;
  * refresh rate of 1.02 seconds will have it refresh at 1.02/2 = 0.51 seconds, but what's displayed might
  * not be of much extra help since it's still going off the the same samples, just overlapping the chunks it has.
  *
- * Return NULL on error.
+ * Return whether initialisation was successful.
  */
-void gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, double min_valid_freq, double max_valid_freq);
+bool gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, 
+		double min_valid_freq, double max_valid_freq);
 
 /*
  * gtune_free - Clean up and free a guiter tuner allocated with gtune_init

@@ -17,7 +17,7 @@ static int chunk_stepsz(int chunksz, int nsteps)
 	return chunksz/nsteps;
 }
 
-void gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, 
+bool gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, 
 		double min_valid_freq, double max_valid_freq)
 {
 	fdata_init(&g->freq, sample_rate, chunksz);
@@ -28,23 +28,21 @@ void gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps,
 	g->chunk_nsteps = chunk_nsteps;
 	g->chunk_stepsz = chunk_stepsz(chunksz, chunk_nsteps);
 
-	g->mic = mic_init(sample_rate, g->chunk_stepsz);
-
-	if (!g->mic) {
+	if (!mic_init(&g->mic, sample_rate, g->chunk_stepsz)) {
 		fdata_free(&g->freq);
-		return;
+		return false;
 	}
-
 	// Fill with spaces so that its displayed width becomes MAX_NOTE_LEN, as otherwise 
 	// without if it's filled with null-termination characters its display width is 0.
 	memset(g->note, ' ', MAX_NOTE_LEN);  
 	g->samples = malloc(g->chunksz*sizeof(float));
+	return true;
 }
 
 void gtune_cleanup(gtune_t *g)
 {
 	free(g->samples);
-	mic_cleanup(g->mic);
+	mic_cleanup(&g->mic);
 	fdata_free(&g->freq);
 }
 
@@ -84,7 +82,7 @@ static void gtune_freq(gtune_t *g, float *samples)
 static void gtune(gtune_t *g)
 {
 	for (;;) {
-		mic_read(g->mic, g->samples, g->chunksz);
+		mic_read(&g->mic, g->samples, g->chunksz);
 		gtune_freq(g, g->samples);
 	}
 }
@@ -102,13 +100,13 @@ static void gtune_step(gtune_t *g)
 	int chunk_last_step = (g->chunk_nsteps-1)*g->chunk_stepsz;
 
 	// Read a whole chunk.
-	mic_read(g->mic, g->samples, g->chunksz);
+	mic_read(&g->mic, g->samples, g->chunksz);
 
 	for (;;) {
 		gtune_freq(g, g->samples);
 		memcpy((void *)g->samples, (void *)g->samples+g->chunk_stepsz, chunk_last_step*sizeof(float));
 		// Read a step of a chunk (will block for chunksz/number of chunk steps amount of time).
-		mic_read(g->mic, g->samples+chunk_last_step, g->chunk_stepsz);
+		mic_read(&g->mic, g->samples+chunk_last_step, g->chunk_stepsz);
 	}
 }
 

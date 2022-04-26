@@ -10,6 +10,7 @@
 #define MIC_H
 
 #include <portaudio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "err.h"
@@ -26,10 +27,10 @@ typedef struct microphone mic_t;
  * @readsz: number of samples per read (although a read doesn't have to match this, but
  *	it should for performance reasons)
  * 
- * Uses the default microphone. Return NULL on error. Starts the underlying
+ * Uses the default microphone. Return whether the intialisation was successful. Starts the underlying
  * stream which can be stopped with mic_free (which also cleans up the data structure).
  */
-mic_t *mic_init(int sample_rate, int readsz);
+bool mic_init(mic_t *m, int sample_rate, int readsz);
 
 /*
  * mic_read - Read samples from a microphone

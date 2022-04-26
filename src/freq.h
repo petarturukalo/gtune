@@ -35,7 +35,7 @@ typedef struct frequency_data fdata_t;
  * @chunksz: size of chunk which restricts the samples being processed. Also
  *	the number of samples processed each execution
  *
- * Return NULL on error. Dynamically allocated, must be freed with fdata_free.
+ * Free with with fdata_free.
  */
 void fdata_init(fdata_t *f, int sample_rate, int chunksz);
 

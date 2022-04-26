@@ -30,27 +30,24 @@ int mic_set_params(PaStreamParameters *p)
 	return 0;
 }
 
-mic_t *mic_init(int sample_rate, int readsz)
+bool mic_init(mic_t *m, int sample_rate, int readsz)
 {
 	PaError err;
-	mic_t *m;
 	PaStreamParameters mic_params;
 
 	err = Pa_Initialize();
 
 	if (err != paNoError) {
 		err_print("couldn't init portaudio", Pa_GetErrorText(err));
-		return NULL;
+		return false;
 	}
 
-	m = malloc(sizeof(mic_t));
 	err = mic_set_params(&mic_params);
 
 	if (err == -1) {
 		err_print("couldn't get default input device", Pa_GetErrorText(err));
-		free(m);
 		Pa_Terminate();
-		return NULL;
+		return false;
 	}
 
 	err = Pa_OpenStream(&m->stream, &mic_params, NULL, sample_rate, readsz, 
@@ -59,8 +56,7 @@ mic_t *mic_init(int sample_rate, int readsz)
 	if (err != paNoError) {
 		err_print("couldn't open audio input stream", Pa_GetErrorText(err));
 		Pa_Terminate();
-		free(m);
-		return NULL;
+		return false;
 	}
 
 	err = Pa_StartStream(m->stream);
@@ -69,11 +65,9 @@ mic_t *mic_init(int sample_rate, int readsz)
 		err_print("couldn't start audio input stream", Pa_GetErrorText(err));
 		Pa_CloseStream(m->stream);
 		Pa_Terminate();
-		free(m);
-		return NULL;
+		return false;
 	}
-
-	return m;
+	return true;
 }
 
 void mic_read(mic_t *m, float *samples, int readsz)
@@ -86,6 +80,5 @@ void mic_cleanup(mic_t *m)
 	Pa_StopStream(m->stream);
 	Pa_CloseStream(m->stream);
 	Pa_Terminate();
-	free(m);
 }
 
