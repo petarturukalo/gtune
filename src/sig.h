@@ -11,13 +11,13 @@
 #include <signal.h>
 #include <stdlib.h>
 
-/**
+/*
  * sig_block - Block signals for so that initialisation of the program
  *	isn't interrupted
  */
 void sig_block(void);
 
-/**
+/*
  * sig_handle - Set up signal handlers for exiting and cleaning up the program
  */
 void sig_handle(void);

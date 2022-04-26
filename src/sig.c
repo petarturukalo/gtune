@@ -17,7 +17,7 @@ void sighandle(int sig)
 	exit(EXIT_SUCCESS);
 }
 
-/**
+/*
  * sig_setup - Set up the handler for a signal
  * @sig_handle: signal to handle
  * @sig_block: signal to block while handling

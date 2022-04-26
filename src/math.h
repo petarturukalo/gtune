@@ -11,12 +11,12 @@
 #include <math.h>
 #include <fftw3.h>
 
-/**
+/*
  * magnitude - Get the magnitude of a complex number
  */
 double magnitude(fftw_complex c);
 
-/**
+/*
  * magnitudes - Get the magnitudes of multiple complex numbers
  * @c: array of complex numbers
  * @mags: array of magnitudes
@@ -24,7 +24,7 @@ double magnitude(fftw_complex c);
  */
 void magnitudes(fftw_complex *c, double *mags, int n);
 
-/**
+/*
  * nr_new_range - Convert a number in a current range to a new range
  * @n: number
  * @start: start (inclusive) of number's current range 
@@ -37,7 +37,7 @@ void magnitudes(fftw_complex *c, double *mags, int n);
  */
 double nr_new_range(int n, int start, int end, int new_start, int new_end);
 
-/**
+/*
  * max_sint16 - Get the max value in an array of signed 16-bit integer
  * @a: array
  * @n: length of array
@@ -46,7 +46,7 @@ double nr_new_range(int n, int start, int end, int new_start, int new_end);
  */
 short max_sint16(short *a, int n);
 
-/**
+/*
  * max_sint16 - Get the min value in an array of signed 16-bit integers
  * @a: array
  * @n: length of array
@@ -55,7 +55,7 @@ short max_sint16(short *a, int n);
  */
 short min_sint16(short *a, int n);
 
-/**
+/*
  * maxi_dbl - Get the index of the maximum double value in an 
  *	array of doubles
  * @a: array of doubles
@@ -65,7 +65,7 @@ short min_sint16(short *a, int n);
  */
 int maxi_dbl(double *a, int n);
 
-/**
+/*
  * frequency - Calculate the frequency of an index in the frequency domain
  * @sample_rate: sample rate from time domain before conversion to frequency domain
  * @bin_index: index of frequency bin in frequency domain

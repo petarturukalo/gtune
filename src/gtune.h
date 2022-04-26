@@ -31,7 +31,7 @@ struct guitar_tuner {
 
 typedef struct guitar_tuner gtune_t;
 
-/**
+/*
  * gtune_init - Initialise guitar tuner data
  * @sample_rate: number of samples recorded per second
  * @chunksz: number of samples to both read and process per frequency calculation
@@ -62,12 +62,12 @@ typedef struct guitar_tuner gtune_t;
  */
 gtune_t *gtune_init(int sample_rate, int chunksz, int chunk_nsteps, double min_valid_freq, double max_valid_freq);
 
-/**
+/*
  * gtune_free - Clean up and free a guiter tuner allocated with gtune_init
  */
 void gtune_cleanup(gtune_t *g);
 
-/**
+/*
  * gtune_start - Start recording and displaying frequencies and notes
  */
 void gtune_start(gtune_t *g);

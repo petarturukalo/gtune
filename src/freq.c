@@ -5,7 +5,7 @@
  */
 #include "freq.h"
 
-/**
+/*
  * nmag - Get the number of magnitudes that need to be processed
  */
 int nmag(int chunksz)
@@ -36,7 +36,7 @@ fdata_t *fdata_init(int sample_rate, int chunksz)
 	return f;
 }
 
-/**
+/*
  * process_chunk - Process a chunk of samples
  * @samples: samples to process cast to void pointer (can be any data type)
  * @conv: function which takes param samples and norm array and is expected to convert
@@ -66,7 +66,7 @@ static int process_chunk(fdata_t *f, fftw_plan p, void *samples, void (*conv)(vo
 	f->maxi = maxi_dbl(f->hps, m);
 }
 
-/**
+/*
  * conv_samples_float32 - "Convert" float 32-bit samples already preprocessed to be in range 
  *	-1 to 1 into the double array
  */
@@ -83,7 +83,7 @@ void fdata_process_chunk_float32_preprocd(fdata_t *f, float *samples)
 	process_chunk(f, f->p, (void *)samples, conv_samples_float32_preprocd);
 }
 
-/**
+/*
  * normalise - Move an int from its current min-max range into a range with min -1 and
  *	max 1 (range of the new normalised number)
  * @n: number to normalise
@@ -98,7 +98,7 @@ static double normalise(int n, int min, int max)
 	return nr_new_range(n, min, max, -1, 1);
 }
 
-/**
+/*
  * conv_samples_sint16 - Convert signed 16-bit integer samples into normalised doubles
  *	in range -1 and 1
  */
@@ -119,7 +119,7 @@ void fdata_process_chunk_sint16(fdata_t *f, short *samples)
 	process_chunk(f, f->p, (void *)samples, conv_samples_sint16);
 }
 
-/**
+/*
  * nfull_chunks - Calculate the number of full chunks processed
  * @nsamps: total number of samples to process
  * @chunksz: number of samples to process at a time
@@ -134,7 +134,7 @@ static int nfull_chunks(int nsamps, int chunksz, int step)
 	return 0;
 }
 
-/**
+/*
  * npart_chunks - Calculate the number of part chunks processed
  * @nsamps: total number of samples to process
  * @nfull: number of full chunks processed over all the samples given the step size
@@ -150,7 +150,7 @@ double fdata_frequency(fdata_t *f)
 	return frequency(f->sample_rate, f->maxi, f->chunksz);
 }
 
-/**
+/*
  * fdata_process_all - Process all samples chunk by chunk in one function call
  * @samples: samples to process cast to void pointer
  * @nsamps: total number of samples

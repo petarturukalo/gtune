@@ -5,7 +5,7 @@
  */
 #include "mic.h"
 
-/**
+/*
  * mic_set_params - Set default parameters for the microphone
  *
  * Return -1 on couldn't get the default device. Return 0 on success.

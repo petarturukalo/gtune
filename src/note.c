@@ -33,7 +33,7 @@ char *note_alloc(void)
 	return s;
 }
 
-/**
+/*
  * semitones_from_note - Get the number of semitones a note is away from another note
  * @freq: frequency of note
  * @target_freq: frequency of the other note
@@ -43,7 +43,7 @@ static double semitones_from_note(double freq, double target_freq)
 	return NNOTES*log2(freq/target_freq);
 }
 
-/**
+/*
  * semitones_from_base - Get the number of semitones a note is away from the base note
  * @freq: frequency of note to get number of semitones away from base note of
  */
@@ -52,7 +52,7 @@ static double semitones_from_base(double freq)
 	return semitones_from_note(freq, BASE_NOTE_FREQ);
 }
 
-/**
+/*
  * note_index - Get the index of a note in the notes array
  *
  * Gets the closest note.
@@ -63,7 +63,7 @@ static int note_index(double freq)
 	return i < 0 ? NNOTES+i : i;
 }
 
-/**
+/*
  * note_number - Get the number of the note, such as 4 for note A4 with 440 Hz frequency
  * @note: note name
  * @n: length of note name

@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-/**
+/*
  * hanning_window - Run a hanning window on an array (in-place)
  * @a: array to run Hanning window on
  * @n: length of array

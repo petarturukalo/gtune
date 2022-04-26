@@ -22,7 +22,7 @@ double frequency(int sample_rate, int bin_index, int nbins)
 	return (sample_rate*bin_index)/(double)nbins;
 }
 
-/**
+/*
  * dist - Get the distance between two numbers
  * @lt: the lesser of the two numbers
  * @gt: the greater of the two numbers
@@ -32,7 +32,7 @@ static int dist(int lt, int gt)
 	return gt-lt;
 }
 
-/**
+/*
  * nr_prcnt_over_range - Get a number's percentage across a range
  * @n: number in range between start and end
  * @start: number start of range (inclusive)

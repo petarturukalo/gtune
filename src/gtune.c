@@ -5,7 +5,7 @@
  */
 #include "gtune.h"
 
-/**
+/*
  * chunk_stepsz - Get the size of a chunk step
  * @chunksz: size of chunk
  * @nsteps: number of steps to pass a whole chunk of the given size
@@ -66,7 +66,7 @@ static void print_note(char *note, double freq)
 	fflush(stdout);
 }
 
-/**
+/*
  * gtune_freq - Calculate and print a frequency and its note
  * @samples: samples to process. Processes chunksz amount of samples as input
  *	at init-time of gtune
@@ -83,7 +83,7 @@ static void gtune_freq(gtune_t *g, float *samples)
 	print_note(g->note, note_freq);
 }
 
-/**
+/*
  * gtune - Process samples without a step
  */
 static void gtune(gtune_t *g)
@@ -94,7 +94,7 @@ static void gtune(gtune_t *g)
 	}
 }
 
-/**
+/*
  * gtune_step - Process samples with the step provided by the user 
  *
  * This implementation does a bunch of copying, which is fine since it's O(n) and 

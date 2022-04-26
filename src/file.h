@@ -14,13 +14,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-/**
+/*
  * filesz - Get the size of a file in bytes
  * @fd: file descriptor to open file
  */
 int filesz(int fd);
 
-/**
+/*
  * fread_sint16 - Open and read the contents of a file interpreting it as signed 16-bit integers
  * @fpath: path to file
  * @n: out-param where to store length of allocated buffer

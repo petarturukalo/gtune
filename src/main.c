@@ -12,7 +12,7 @@
 
 gtune_t *g;
 
-/**
+/*
  * cleanup - Clean up the program at exit
  */
 void cleanup(void)

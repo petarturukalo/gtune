@@ -29,7 +29,7 @@ struct frequency_data {
 typedef struct frequency_data fdata_t;
 
 
-/**
+/*
  * fdata_init - Initialise a new frequency data
  * @sample_rate: sample rate in Hz
  * @chunksz: size of chunk which restricts the samples being processed. Also
@@ -39,25 +39,25 @@ typedef struct frequency_data fdata_t;
  */
 fdata_t *fdata_init(int sample_rate, int chunksz);
 
-/**
+/*
  * fdata_free - Free a frequency data initialised with fdata_init
  */
 void fdata_free(fdata_t *f);
 
 
-/**
+/*
  * fdata_process_chunk - Process a chunk of 32-bit float samples where each float has
  *	already been preprocessed to be in range -1 to 1 (endpoints inclusive)
  * @samples: samples to process
  */
 void fdata_process_chunk_float32_preprocd(fdata_t *f, float *samples);
 
-/**
+/*
  * fdata_process_chunk_sint16 - Process a chunk of signed 16-bit integer samples
  */
 void fdata_process_chunk_sint16(fdata_t *f, short *samples);
 
-/**
+/*
  * fdata_process_all_sint16 - Process all signed 16-bit integer samples
  * @nsamps: number of samples
  * @stepsz: number of samples to move forward after each processing of a chunk of samples
@@ -68,7 +68,7 @@ void fdata_process_chunk_sint16(fdata_t *f, short *samples);
  */
 double *fdata_process_all_sint16(fdata_t *f, short *samples, int nsamps, int stepsz, int *n);
 
-/**
+/*
  * fdata_frequency - Get the frequency from processed samples
  *
  * Gets the frequency of the samples last processed by function fdata_process.

@@ -11,7 +11,7 @@
 #include <string.h>
 #include "math.h"
 
-/**
+/*
  * hps - Proecss a harmonic product spectrum (HPS) array for finding the fundamental frequency from
  *	a monophonic audio signal with harmonics, such as from playing a single guitar string
  *	note

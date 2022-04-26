@@ -21,7 +21,7 @@ struct microphone {
 
 typedef struct microphone mic_t;
 
-/**
+/*
  * mic_init - Initialise a new microphone for audio input
  * @sample_rate: samples per second (Hz)
  * @readsz: number of samples per read (although a read doesn't have to match this, but
@@ -32,7 +32,7 @@ typedef struct microphone mic_t;
  */
 mic_t *mic_init(int sample_rate, int readsz);
 
-/**
+/*
  * mic_read - Read samples from a microphone
  * @samples: array to store read samples into
  * @readsz: number of samples to read (preferrably the same as sthe init-time read size)
@@ -42,7 +42,7 @@ mic_t *mic_init(int sample_rate, int readsz);
  */
 void mic_read(mic_t *m, float *samples, int readsz);
 
-/**
+/*
  * mic_cleanup - Clean up a microphone data structure initialised with mic_init
  */
 void mic_cleanup(mic_t *m);

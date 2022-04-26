@@ -5,7 +5,7 @@
  */
 #include "win.h"
 
-/**
+/*
  * hann - Compute the Hanning function for a number i in range 0 <= i < n.
  */
 double hann(int i, int n)
