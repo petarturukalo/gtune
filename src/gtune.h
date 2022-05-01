@@ -21,6 +21,7 @@ struct guitar_tuner {
 	fdata_t freq;  // For converting audio input into frequencies.
 	mic_t mic;  // For audio input.
 	char note[MAX_NOTE_LEN];  // Frequency converted to a musical note.
+	sdtype_meta_t *meta;  // Metadata describing the data type of the samples for normalising them.
 	float *samples;  // Array to store read samples in.
 	double min_valid_freq;
 	double max_valid_freq;

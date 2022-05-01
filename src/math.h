@@ -9,6 +9,7 @@
 #define MATH_H
 
 #include <math.h>
+#include <string.h>
 #include <fftw3.h>
 
 /*
@@ -35,35 +36,7 @@ void magnitudes(fftw_complex *c, double *mags, int n);
  * Number 5 in range 0 to 10 converted to new range 10 to 20 is 15 (halfway through
  * the range).
  */
-double nr_new_range(int n, int start, int end, int new_start, int new_end);
-
-/*
- * max_sint16 - Get the max value in an array of signed 16-bit integer
- * @a: array
- * @n: length of array
- *
- * Assumes the array has at least 1 element.
- */
-short max_sint16(short *a, int n);
-
-/*
- * max_sint16 - Get the min value in an array of signed 16-bit integers
- * @a: array
- * @n: length of array
- *
- * Assumes the array has at least 1 element.
- */
-short min_sint16(short *a, int n);
-
-/*
- * maxi_dbl - Get the index of the maximum double value in an 
- *	array of doubles
- * @a: array of doubles
- * @n: length of array
- *
- * Assumes the array has at least 1 element.
- */
-int maxi_dbl(double *a, int n);
+double nr_new_range(double n, double start, double end, double new_start, double new_end);
 
 /*
  * frequency - Calculate the frequency of an index in the frequency domain
@@ -72,5 +45,16 @@ int maxi_dbl(double *a, int n);
  * @nbins: number of bins in the frequency domain
  */
 double frequency(int sample_rate, int bin_index, int nbins);
+
+/*
+ * hps - Proecss a harmonic product spectrum (HPS) array for finding the fundamental frequency from
+ *	a monophonic audio signal with harmonics, such as from playing a single guitar string
+ *	note
+ * @mag: array of magnitudes 
+ * @h: empty harmonic product spectrum array 
+ * @len: length of both arrays
+ * @n: number of times to downsample and largest downsample integer
+ */
+void hps(double *mag, double *h, int len, int n);
 
 #endif

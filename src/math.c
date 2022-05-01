@@ -23,11 +23,11 @@ double frequency(int sample_rate, int bin_index, int nbins)
 }
 
 /*
- * dist - Get the distance between two numbers
+ * dist_double - Get the distance between two numbers
  * @lt: the lesser of the two numbers
  * @gt: the greater of the two numbers
  */
-static int dist(int lt, int gt)
+static double dist(double lt, double gt)
 {
 	return gt-lt;
 }
@@ -41,53 +41,33 @@ static int dist(int lt, int gt)
  * Number 5 in range 0 to 10 is 50% (would return 0.5) across the range. 
  * Number 4 in the same range is 40% (0.4) across the range, etc.
  */
-double nr_prcnt_over_range(int n, int start, int end)
+static double nr_prcnt_over_range(double n, double start, double end)
 {
-	int nlen, rangelen;
+	double nlen, rangelen;
 
 	nlen = dist(start, n);
 	rangelen = dist(start, end);
 
-	return nlen/(double)rangelen;
+	return nlen/rangelen;
 }
 
-double nr_new_range(int n, int start, int end, int new_start, int new_end)
+double nr_new_range(double n, double start, double end, double new_start, double new_end)
 {
 	// Length of new range.
-	int rangelen = dist(new_start, new_end);  
+	double rangelen = dist(new_start, new_end);  
 	return new_start+nr_prcnt_over_range(n, start, end)*rangelen;
 }
 
-short max_sint16(short *a, int n)
+void hps(double *mag, double *h, int len, int n)
 {
-	short max = a[0];
+	int ds, end, i;
 
-	for (int i = 1; i < n; ++i) {
-		if (a[i] > max)
-			max = a[i];
+	memcpy((void *)h, (void *)mag, len*sizeof(double));
+
+	// Skip downsampling first since already done by memcpy.
+	for (ds = 2; ds <= n; ++ds) {
+		end = len/ds;
+		for (i = 0; i < end; ++i)
+			h[i] *= mag[i*ds];
 	}
-	return max;
 }
-
-short min_sint16(short *a, int n)
-{
-	short min = a[0];
-
-	for (int i = 1; i < n; ++i) {
-		if (a[i] < min)
-			min = a[i];
-	}
-	return min;
-}
-
-int maxi_dbl(double *a, int n)
-{
-	int mi = 0;
-
-	for (int i = 1; i < n; ++i) {
-		if (a[i] > a[mi]) 
-			mi = i;
-	}
-	return mi;
-}
-

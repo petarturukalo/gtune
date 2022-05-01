@@ -13,7 +13,7 @@
 #include <fftw3.h>
 #include "math.h"
 #include "win.h"
-#include "hps.h"
+#include "norm.h"
 
 struct frequency_data {
 	int sample_rate;
@@ -46,34 +46,9 @@ void fdata_free(fdata_t *f);
 
 
 /*
- * fdata_process_chunk - Process a chunk of 32-bit float samples where each float has
- *	already been preprocessed to be in range -1 to 1 (endpoints inclusive)
- * @samples: samples to process
+ * fdata_process_chunk - Process a chunk of samples for a frequency
+ * See process_chunk for more info.
  */
-void fdata_process_chunk_float32_preprocd(fdata_t *f, float *samples);
-
-/*
- * fdata_process_chunk_sint16 - Process a chunk of signed 16-bit integer samples
- */
-void fdata_process_chunk_sint16(fdata_t *f, short *samples);
-
-/*
- * fdata_process_all_sint16 - Process all signed 16-bit integer samples
- * @nsamps: number of samples
- * @stepsz: number of samples to move forward after each processing of a chunk of samples
- * @n: out-parameter to store length of returned frequencies array
- *
- * Return array of frequencies, each element being a frequency for a chunk of chunk size
- * matching the init-time chunk size specification.
- */
-double *fdata_process_all_sint16(fdata_t *f, short *samples, int nsamps, int stepsz, int *n);
-
-/*
- * fdata_frequency - Get the frequency from processed samples
- *
- * Gets the frequency of the samples last processed by function fdata_process.
- * Assumes fdata_process has been called at least once (after initialisation, also).
- */
-double fdata_frequency(fdata_t *f);
+double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise);
 
 #endif
