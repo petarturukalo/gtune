@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: GPL-2.0
  *
- * Copyright (C) 2021 Petar Turukalo
+ * Copyright (C) 2022 Petar Turukalo
  */
 #include "test-norm.h"
 

@@ -14,7 +14,6 @@
 
 typedef unsigned int uint;
 
-// The type of number that a sample's data type is.
 typedef enum {
 	SDTYPE_FLOAT,
 	SDTYPE_DOUBLE,
@@ -28,7 +27,7 @@ typedef enum {
  * Data type dependent data required to normalise samples.
  */
 struct sample_data_type_metadata {
-	sdtype_number_type number_type;  // Whether the data type is an integer type.
+	sdtype_number_type number_type;
 	uint samplesz;  // Size of a sample in bytes.
 };
 
@@ -46,9 +45,7 @@ extern sdtype_meta_t sdtype_meta_uint32;
  * The minimum of the samples becomes -1 and the max 1.
  * @samples: array of samples to normalise
  * @n: number of samples
- * @meta: metadata describing the data type of the samples. If this is NULL it is assumed
- *	the samples have already been normalised and so they are just copied directly across
- *	to the normal array.
+ * @meta: metadata describing the data type of the samples. 
  * @norm: out-param array where to store normalised samples. This should be the 
  *	same length as the samples array.
  */

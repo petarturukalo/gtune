@@ -69,7 +69,6 @@ static bool gt_ushort(void *a, void *b) { return *(unsigned short *)a > *(unsign
 static bool lt_uint(void *a, void *b)   { return *(unsigned int *)a < *(unsigned int *)b; }
 static bool gt_uint(void *a, void *b)   { return *(unsigned int *)a > *(unsigned int *)b; }
 
-// Convert numeric type to double functions.
 static double ftod(void *p)  { return *(float *)p; }
 static double dtod(void *p)  { return *(double *)p; }
 static double stod(void *p)  { return *(short *)p; }
@@ -84,8 +83,7 @@ struct sdtype_fns {
 };
 
 /*
- * Select comparison and conversion functions dependent on numeric data type 
- * being used as a sample.
+ * Select comparison and conversion functions dependent on a sample's numeric data type.
  */
 static struct sdtype_fns select_sdtype_fns(sdtype_number_type type)
 {
