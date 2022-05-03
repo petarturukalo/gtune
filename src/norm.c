@@ -47,9 +47,8 @@ static bool min_sample(char *samples, uint samplesz, uint n, char *out_min,
 		memcpy(out_min, samples, samplesz);
 		samples += samplesz;
 		for (int i = 1; i < n; ++i) {
-			if (lt(samples, out_min))  {
+			if (lt(samples, out_min))  
 				memcpy(out_min, samples, samplesz);
-			}
 			samples += samplesz;
 		}
 	} 

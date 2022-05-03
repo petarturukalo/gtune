@@ -10,9 +10,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <limits.h>
+#include <sys/types.h>
 #include "math.h"
-
-typedef unsigned int uint;
 
 typedef enum {
 	SDTYPE_FLOAT,
