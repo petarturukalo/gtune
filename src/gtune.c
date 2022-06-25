@@ -105,7 +105,7 @@ static void gtune_step(gtune_t *g)
 
 	for (;;) {
 		gtune_freq(g, g->samples);
-		memcpy(g->samples, g->samples+g->chunk_stepsz, chunk_last_step*sizeof(float));
+		memcpy(g->samples, g->samples+g->chunk_stepsz, chunk_last_step*g->meta->samplesz);
 		// Read a step of a chunk (will block for chunksz/number of chunk steps amount of time).
 		mic_read(&g->mic, g->samples+chunk_last_step, g->chunk_stepsz);
 	}
@@ -115,7 +115,7 @@ void gtune_start(gtune_t *g)
 {
 	print_header();
 
-	// Trusts the user not to enter bad values.
+	// Trusts the user (me) not to enter bad values.
 	if (g->chunk_nsteps == 1)
 		gtune(g);
 	else
