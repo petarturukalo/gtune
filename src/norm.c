@@ -10,49 +10,49 @@
 #define MAX_SAMPLE_SZ 8
 
 /*
- * Get the max sample in an array of samples.
+ * Get the best sample in an array of samples, where the "best" sample is determined
+ * by the comparison function.
  * @samples: the array of samples
  * @samplesz: the size of a sample in bytes
  * @n: the number of samples in the array
  * @out_max: where to store the max sample. This should be of size samplesz
- * @gt: function to compare whether a sample is greater than another sample
+ * @cmp: comparison function comparing whether its first param is better than
+ *	its second
+ */
+static bool best_sample(char *samples, uint samplesz, uint n, char *out_best,
+			bool (*cmp)(void *, void *))
+{
+	if (!samples || !samplesz || !n || !out_best || !cmp)
+		return false;
+
+	memcpy(out_best, samples, samplesz);
+	samples += samplesz;
+	while (--n) {
+		if (cmp(samples, out_best))
+			memcpy(out_best, samples, samplesz);
+		samples += samplesz;
+	}
+	return true;
+}
+
+/*
+ * Get the max sample in an array of samples.
+ * @lt: function to compare whether a sample is greater than another sample
  */
 static bool max_sample(char *samples, uint samplesz, uint n, char *out_max, 
 		       bool (*gt)(void *, void *))
 {
-	if (n) {
-		memcpy(out_max, samples, samplesz);
-		samples += samplesz;
-		for (int i = 1; i < n; ++i) {
-			if (gt(samples, out_max))
-				memcpy(out_max, samples, samplesz);
-			samples += samplesz;
-		}
-	} 
-	return n;
+	return best_sample(samples, samplesz, n, out_max, gt);
 }
 
 /*
  * Get the min sample in an array of samples.
- * @samples: the array of samples
- * @samplesz: the size of a sample in bytes
- * @n: the number of samples in the array
- * @out_min: where to store the min sample. This should be of size samplesz
  * @lt: function to compare whether a sample is less than another sample
  */
 static bool min_sample(char *samples, uint samplesz, uint n, char *out_min, 
 		       bool (*lt)(void *, void *))
 {
-	if (n) {
-		memcpy(out_min, samples, samplesz);
-		samples += samplesz;
-		for (int i = 1; i < n; ++i) {
-			if (lt(samples, out_min))  
-				memcpy(out_min, samples, samplesz);
-			samples += samplesz;
-		}
-	} 
-	return n;
+	return best_sample(samples, samplesz, n, out_min, lt);
 }
 
 static bool lt_float(void *a, void *b)  { return *(float *)a < *(float *)b; }
@@ -121,13 +121,13 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 	bzero(min_samp, sizeof(min_samp));
 	bzero(max_samp, sizeof(max_samp));
 
-	if (!min_sample(samples, meta->samplesz, n, min_samp, fns.lt))
+	if (min_sample(samples, meta->samplesz, n, min_samp, fns.lt) == false)
 		return false;
-	if (!max_sample(samples, meta->samplesz, n, max_samp, fns.gt))
+	if (max_sample(samples, meta->samplesz, n, max_samp, fns.gt) == false)
 		return false;
 
-	for (int i = 0; i < n; ++i) {
-		norm[i] = normalise(fns.xtod(samples), fns.xtod(min_samp), 
+	for (; n--; ++norm) {
+		*norm = normalise(fns.xtod(samples), fns.xtod(min_samp), 
 				    fns.xtod(max_samp));
 		samples += meta->samplesz;
 	}
@@ -139,8 +139,8 @@ bool normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *
 	if (copy) {
 		struct sdtype_fns fns = select_sdtype_fns(meta->number_type);
 
-		for (int i = 0; i < n; ++i) {
-			norm[i] = fns.xtod(samples);
+		for (; n--; ++norm) {
+			*norm = fns.xtod(samples);
 			samples += meta->samplesz;
 		}
 		return true;
