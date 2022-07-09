@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <fftw3.h>
 #include "math.h"
-#include "win.h"
 #include "norm.h"
 
 struct frequency_data {

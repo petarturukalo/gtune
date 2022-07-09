@@ -57,4 +57,11 @@ double frequency(int sample_rate, int bin_index, int nbins);
  */
 void hps(double *mag, double *h, int len, int n);
 
+/*
+ * hanning_window - Run a hanning window on an array (in-place)
+ * @a: array to run Hanning window on
+ * @n: length of array
+ */
+void hanning_window(double *a, int n);
+
 #endif
