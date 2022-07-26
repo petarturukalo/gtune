@@ -63,19 +63,17 @@ static int note_number(double freq, const char *note, int n)
 
 void note_from_freq(double freq, char *s)
 {
-	double sdist;
-	int note_ind, note_nr, i, n;
+	int note_ind, note_nr;
 	const char *note;
 
 	note_ind = note_index(freq);
 	note = NOTES[note_ind];
 	note_nr = note_number(freq, note, strlen(note));
 
-	bzero(s, MAX_NOTE_LEN);
-	strcat(s, note);  // Append note letter.
-	i = strlen(s);
-	s[i++] = '0'+note_nr;  // Append its number.
-	if (i < MAX_NOTE_LEN)
-		s[i] = ' ';  // Pad with spaces so that "A0" and "A#0" (etc.) become the same width.
+	// Set to all spaces instead of all 0 so that "A0" and "A#0" (etc.) become the same width.
+	memset(s, ' ', MAX_NOTE_LEN);
+	strcpy(s, note);  // Append note letter.
+	s += strlen(note);
+	*s = '0'+note_nr;  // Append its number.
 }
 

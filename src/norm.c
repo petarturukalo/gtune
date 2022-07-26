@@ -128,7 +128,7 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 
 	for (; n--; ++norm) {
 		*norm = normalise(fns.xtod(samples), fns.xtod(min_samp), 
-				    fns.xtod(max_samp));
+				  fns.xtod(max_samp));
 		samples += meta->samplesz;
 	}
 	return true;
