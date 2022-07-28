@@ -41,7 +41,6 @@ bool mic_init(mic_t *m, int sample_rate, int readsz)
 		err_print("couldn't init portaudio", Pa_GetErrorText(err));
 		return false;
 	}
-
 	err = mic_set_params(&mic_params);
 
 	if (err == -1) {
@@ -49,16 +48,13 @@ bool mic_init(mic_t *m, int sample_rate, int readsz)
 		Pa_Terminate();
 		return false;
 	}
-
 	err = Pa_OpenStream(&m->stream, &mic_params, NULL, sample_rate, readsz, 
 			    paClipOff, NULL, NULL);
-
 	if (err != paNoError) {
 		err_print("couldn't open audio input stream", Pa_GetErrorText(err));
 		Pa_Terminate();
 		return false;
 	}
-
 	err = Pa_StartStream(m->stream);
 
 	if (err != paNoError) {
