@@ -5,7 +5,7 @@
  */
 #include "err.h"
 
-char *prgname = NULL;
+static char *prgname = NULL;
 
 void err_set_prgname(char *name)
 {
