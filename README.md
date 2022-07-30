@@ -19,8 +19,9 @@ frequency (Hz) output, which is then converted to a musical note. The following 
 steps involved in getting this frequency reading from digital audio signal samples read from
 an input device.
 
-1. Normalise samples into range -1 to 1 (both ends inclusive). The max sample 
-of the samples chunk gets normalised to 1, and the min to -1.
+<s>1. Normalise samples into range -1 to 1 (both ends inclusive). The max sample 
+of the samples chunk gets normalised to 1, and the min to -1.</s> (See code and comments in it about 
+skipping this step.)
 2. Preprocess the normalised samples by running a Hanning window on it.
 3. Run a fast Fourier transform on the normalised samples to convert them from time domain
 to frequency domain. The input to FFT are the normalised samples and the output are complex numbers.
