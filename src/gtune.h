@@ -47,6 +47,7 @@ typedef struct guitar_tuner gtune_t;
  *	a step of 2 there will be 2 prints per chunk process, using overlapping parts of the chunks.
  * @min_valid_freq: minimum valid frequency (inclusive) that is considered a note. 
  * @max_valid_freq: maximum valid frequency (inclusive) that is considered a note
+ * @fmt: pulse audio data type and size/format of a sample
  *
  * The accuracy of a reading is calculated by sample_rate/chunksz. This means that for a sample rate of
  * 44100 Hz and chunk size of 8192, the accuracy is 44100/8192 ~= 5.38, which has that while tuning up from
