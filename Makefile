@@ -1,7 +1,7 @@
 srcs=$(shell find src -name "*.c" -print)
 objs=$(patsubst src/%.c, build/%.o, $(srcs))
 CC=gcc
-CFLAGS=-c
+CFLAGS=-c -g
 LFLAGS=-lfftw3 -lm -lportaudio
 
 gtune: $(objs)
