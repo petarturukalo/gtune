@@ -25,12 +25,14 @@ int main(int argc, char *argv[])
 	err_set_prgname(argv[0]);
 	sig_block();
 
-	gtune_init(&g, 44100, 32768, 1, 20, 1500);
-
+	if (gtune_init(&g, 44100, 32768, 4, 20, 1500, paFloat32) == false) {
+		eprintf("failed to init gtune");
+		return EXIT_FAILURE;
+	}
 	atexit(cleanup);
 	sig_handle();
 
 	gtune_start(&g);
-
-	return 0;
+	// This shouldn't be reached.
+	return EXIT_FAILURE;
 }
