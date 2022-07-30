@@ -33,7 +33,7 @@ void fdata_free(fdata_t *f)
 bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
 {
 	// Zero the pointers set with malloc so that if one fails those that come
-	// after it can safely be freed becuase they're already NULL pointers.
+	// after it can safely be freed because they're already NULL pointers.
 	bzero(f, sizeof(fdata_t));
 	if ((f->norm = malloc(chunksz*sizeof(double))) == NULL ||
 	    (f->c = malloc(chunksz*sizeof(fftw_complex))) == NULL ||
