@@ -18,11 +18,10 @@ void sighandle(int sig)
 }
 
 /*
- * sig_setup - Set up the handler for a signal
- * @sig_handle: signal to handle
+ * @sig_handle: signal to set up exit handler for
  * @sig_block: signal to block while handling
  */
-void sig_setup(int sig_handle, int sig_block)
+void sig_setup_exit_handle(int sig_handle, int sig_block)
 {
 	struct sigaction sa;
 
@@ -35,7 +34,7 @@ void sig_setup(int sig_handle, int sig_block)
 
 void sig_handle(void)
 {
-	sig_setup(SIGINT, SIGTERM);
-	sig_setup(SIGTERM, SIGINT);
+	sig_setup_exit_handle(SIGINT, SIGTERM);
+	sig_setup_exit_handle(SIGTERM, SIGINT);
 }
 

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 /*
- * sig_block - Block signals for so that initialisation of the program
+ * sig_block - Block signals so that initialisation of the program
  *	isn't interrupted
  */
 void sig_block(void);
