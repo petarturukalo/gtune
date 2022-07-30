@@ -15,21 +15,39 @@ int nmag(int chunksz)
 	return chunksz/2;
 }
 
-void fdata_init(fdata_t *f, int sample_rate, int chunksz)
+static void fdata_free_mallocs(fdata_t *f)
 {
-	f->norm = malloc(chunksz*sizeof(double));
-	f->c = malloc(chunksz*sizeof(fftw_complex));
-	// This array could be combined with the normalised array to save space
-	// since they're used sequentially and not at the same time, but it would
-	// make this code hard to read.
-	f->mag = malloc(nmag(chunksz)*sizeof(double));
-	f->hps = malloc(nmag(chunksz)*sizeof(double));
+	free(f->hps);
+	free(f->mag);
+	free(f->c);
+	free(f->norm);
+}
 
+void fdata_free(fdata_t *f)
+{
+	fftw_destroy_plan(f->p);
+	fftw_cleanup();
+	fdata_free_mallocs(f);
+}
+
+bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
+{
+	// Zero the pointers set with malloc so that if one fails those that come
+	// after it can safely be freed becuase they're already NULL pointers.
+	bzero(f, sizeof(fdata_t));
+	if ((f->norm = malloc(chunksz*sizeof(double))) == NULL ||
+	    (f->c = malloc(chunksz*sizeof(fftw_complex))) == NULL ||
+	    (f->mag = malloc(nmag(chunksz)*sizeof(double))) == NULL ||
+	    (f->hps = malloc(nmag(chunksz)*sizeof(double))) == NULL) {
+		fdata_free_mallocs(f);
+		return false;
+	}
 	// Use measure option since it's expected that multiple chunks of samples
 	// will be processed and not just one (otherwise estimate would be used).
 	f->p = fftw_plan_dft_r2c_1d(chunksz, f->norm, f->c, FFTW_MEASURE);
 	f->sample_rate = sample_rate;
 	f->chunksz = chunksz;
+	return true;
 }
 
 /*
@@ -65,8 +83,9 @@ static int maxi_dbl(double *a, int n)
 static double process_chunk(fdata_t *f, fftw_plan p, char *samples, int n, sdtype_meta_t *meta,
 			    bool skip_normalise)
 {
+	uint maxi;
 	int m = nmag(f->chunksz);
-
+	
 	// Generate normalised values, floating point numbers in range -1 to 1, 
 	// which are input for FFT.
 	normalise_samples_copy(samples, f->chunksz, meta, f->norm, skip_normalise);
@@ -76,23 +95,12 @@ static double process_chunk(fdata_t *f, fftw_plan p, char *samples, int n, sdtyp
 	// Use output of FFT to prepare for calculating frequency on a subsequent frequency.
 	magnitudes(f->c, f->mag, m);
 	hps(f->mag, f->hps, m, 5);
-	f->maxi = maxi_dbl(f->hps, m);
+	maxi = maxi_dbl(f->hps, m);
 
-	return frequency(f->sample_rate, f->maxi, f->chunksz);
+	return frequency(f->sample_rate, maxi, f->chunksz);
 }
 
 double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise)
 {
 	return process_chunk(f, f->p, samples, f->chunksz, meta, skip_normalise);
 }
-
-void fdata_free(fdata_t *f)
-{
-	fftw_destroy_plan(f->p);
-	fftw_cleanup();
-	free(f->hps);
-	free(f->mag);
-	free(f->c);
-	free(f->norm);
-}
-

@@ -15,14 +15,15 @@
 #include "norm.h"
 
 struct frequency_data {
-	int sample_rate;
-	int chunksz;  // Size of a chunk to process in samples.
-	int maxi;  // Index of max.
+	uint sample_rate;
+	uint chunksz;  // Size of a chunk to process in samples.
 	fftw_plan p;  // Data required by FFT operation.
 	double *norm;  // Normalised array of data between -1 and 1 (input to FFT).
 	fftw_complex *c;  // Complex number output of FFT operation.
 	double *mag;  // Magnitude frequency outputs of complex data.
 	double *hps;  // Harmonic product spectrum array.
+	// (The mag and hps arrays could be combined to save space since they're used 
+	// sequentially and not at the same time, but it would make the code harder to read.)
 };
 
 typedef struct frequency_data fdata_t;
@@ -34,9 +35,9 @@ typedef struct frequency_data fdata_t;
  * @chunksz: size of chunk which restricts the samples being processed. Also
  *	the number of samples processed each execution
  *
- * Free with with fdata_free.
+ * Return whether the initialisation was successful. Free with with fdata_free.
  */
-void fdata_init(fdata_t *f, int sample_rate, int chunksz);
+bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz);
 
 /*
  * fdata_free - Free a frequency data initialised with fdata_init
