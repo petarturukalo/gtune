@@ -9,6 +9,7 @@
 #define ERR_H
 
 #include <stdio.h>
+#include <stdarg.h>
 
 /*
  * err_set_prgname - Set the program name so that it shows up
@@ -19,13 +20,8 @@
 void err_set_prgname(char *name);
 
 /*
- * err_print - Print an error message to stderr with format 
- *	"prgname: description: source of error"
- * @description: description or error
- * @src: more direct source of error
- *
- * Call err_set_prgname before calling this.
+ * Print an error message to stderror using printf style formatting.
  */
-void err_print(const char *description, const char *src);
+void eprintf(const char *format, ...);
 
 #endif
