@@ -153,6 +153,7 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 		fdata_free(&g->freq);
 		return false;
 	}
+	g->pafmt = fmt;
 	if (mic_init(&g->mic, sample_rate, g->chunk_stepsz, fmt) == false) {
 		fdata_free(&g->freq);
 		free(g->samples);
@@ -193,6 +194,8 @@ static void gtune_freq(gtune_t *g, char *samples)
 {
 	double note_freq;
 
+	// TODO should only be skipping normalisation for paFloat32 since it's already normalised, but
+	// the not already normalised int types seem to work better without it
 	note_freq = fdata_process_chunk(&g->freq, samples, g->meta, true);
 
 	if (note_freq >= g->min_valid_freq && note_freq <= g->max_valid_freq)

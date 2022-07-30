@@ -81,7 +81,7 @@ static uint maxi_dbl(double *a, uint n)
  * of FFT in use, but the user could have read a different data type, such as signed 16-bit integers, 
  * or 32-bit floats, etc.
  */
-static double process_chunk(fdata_t *f, fftw_plan p, char *samples, int n, sdtype_meta_t *meta,
+static double process_chunk(fdata_t *f, fftw_plan p, char *samples, sdtype_meta_t *meta,
 			    bool skip_normalise)
 {
 	uint maxi;
@@ -103,5 +103,5 @@ static double process_chunk(fdata_t *f, fftw_plan p, char *samples, int n, sdtyp
 
 double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise)
 {
-	return process_chunk(f, f->p, samples, f->chunksz, meta, skip_normalise);
+	return process_chunk(f, f->p, samples, meta, skip_normalise);
 }
