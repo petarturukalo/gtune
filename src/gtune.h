@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include "note.h"
 #include "freq.h"
 #include "mic.h"
@@ -22,19 +23,19 @@ struct guitar_tuner {
 	mic_t mic;  // For audio input.
 	char note[MAX_NOTE_LEN];  // Frequency converted to a musical note.
 	sdtype_meta_t *meta;  // Metadata describing the data type of the samples for normalising them.
-	float *samples;  // Array to store read samples in.
+	char *samples;  // Array to store read samples in. The size of a sample is described in meta.
 	double min_valid_freq;
 	double max_valid_freq;
-	int chunksz;
-	int chunk_nsteps;
-	int chunk_stepsz;
+	uint chunksz;
+	uint chunk_nsteps;
+	uint chunk_stepsz;
 };
 
 typedef struct guitar_tuner gtune_t;
 
 /*
  * gtune_init - Initialise guitar tuner data
- * @sample_rate: number of samples recorded per second
+ * @sample_rate: number of samples recorded per second (Hz)
  * @chunksz: number of samples to both read and process per frequency calculation
  * @chunk_nsteps: a number >= 1 that determines the step size between frequency processes. 2 steps means
  *	that the whole of a chunk will be passed in 2 steps. A chunk size of 8192 and chunk steps of 2 gives
@@ -56,13 +57,12 @@ typedef struct guitar_tuner gtune_t;
  * calculation for refresh rate is 1/accuracy, so for an accuracy of 5.38 Hz this is a 1/5.38 ~= 0.19 second
  * refresh rate, but for an improvement in accuracy going to 0.98 Hz, the refresh rate becomes 1/0.98 ~= 
  * 1.02 seconds. This can be "offset" by making chunk_nsteps greater than 1 - making it 2 with an initial
- * refresh rate of 1.02 seconds will have it refresh at 1.02/2 = 0.51 seconds, but what's displayed might
- * not be of much extra help since it's still going off the the same samples, just overlapping the chunks it has.
+ * refresh rate of 1.02 seconds will have it refresh at 1.02/2 = 0.51 seconds.
  *
  * Return whether initialisation was successful.
  */
-bool gtune_init(gtune_t *g, int sample_rate, int chunksz, int chunk_nsteps, 
-		double min_valid_freq, double max_valid_freq);
+bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps, 
+		double min_valid_freq, double max_valid_freq, PaSampleFormat fmt);
 
 /*
  * gtune_free - Clean up and free a guiter tuner allocated with gtune_init
