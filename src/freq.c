@@ -58,13 +58,13 @@ bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
  *
  * Assumes the array has at least 1 element.
  */
-static int maxi_dbl(double *a, int n)
+static uint maxi_dbl(double *a, uint n)
 {
-	int mi = 0;
+	uint mi = 0;
 
-	for (int i = 1; i < n; ++i) {
-		if (a[i] > a[mi]) 
-			mi = i;
+	while (--n) {
+		if (a[n] > a[mi])
+			mi = n;
 	}
 	return mi;
 }
