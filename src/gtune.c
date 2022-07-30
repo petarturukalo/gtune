@@ -145,10 +145,8 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 	g->min_valid_freq = min_valid_freq;
 	g->max_valid_freq = max_valid_freq;
 
-	if (fdata_init(&g->freq, sample_rate, chunksz) == false) {
-		eprintf("failed to init frequency data: %s", strerror(errno));
+	if (fdata_init(&g->freq, sample_rate, chunksz) == false)
 		return false;
-	}
 	// Set up sample data type before initialising mic since it uses the sample data type.
 	if ((g->meta = pasamplefmt_to_sdtype_meta(fmt)) == NULL ||
 	    (g->samples = malloc(g->chunksz*g->meta->samplesz)) == NULL) {

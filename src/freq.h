@@ -11,7 +11,9 @@
 
 #include <stdlib.h>
 #include <fftw3.h>
+#include <errno.h>
 #include "math.h"
+#include "err.h"
 #include "norm.h"
 
 struct frequency_data {

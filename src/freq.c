@@ -39,6 +39,7 @@ bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
 	    (f->c = malloc(chunksz*sizeof(fftw_complex))) == NULL ||
 	    (f->mag = malloc(nmag(chunksz)*sizeof(double))) == NULL ||
 	    (f->hps = malloc(nmag(chunksz)*sizeof(double))) == NULL) {
+		eprintf("failed to init frequency data: %s", strerror(errno));
 		fdata_free_mallocs(f);
 		return false;
 	}
