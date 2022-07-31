@@ -81,20 +81,27 @@ struct sdtype_fns {
 	double (*xtod)(void *);  // Convert a numeric type to a double.
 };
 
+static struct sdtype_fns float_fns  = { lt_float,  gt_float,  ftod };
+static struct sdtype_fns double_fns = { lt_double, gt_double, dtod };
+static struct sdtype_fns short_fns  = { lt_short,  gt_short,  stod };
+static struct sdtype_fns int_fns    = { lt_int,    gt_int,    itod };
+static struct sdtype_fns ushort_fns  = { lt_ushort, gt_ushort, ustod };
+static struct sdtype_fns uint_fns   = { lt_uint,   gt_uint,   uitod };
+
 /*
  * Select comparison and conversion functions dependent on a sample's numeric data type.
  */
-static struct sdtype_fns select_sdtype_fns(sdtype_number_type type)
+static struct sdtype_fns *select_sdtype_fns(sdtype_number_type type)
 {
 	switch (type) {
-		case SDTYPE_FLOAT:  return (struct sdtype_fns){ lt_float,  gt_float,  ftod };
-		case SDTYPE_DOUBLE: return (struct sdtype_fns){ lt_double, gt_double, dtod };
-		case SDTYPE_SHORT:  return (struct sdtype_fns){ lt_short,  gt_short,  stod };
-		case SDTYPE_INT:    return (struct sdtype_fns){ lt_int,    gt_int,    itod };
-		case SDTYPE_USHORT: return (struct sdtype_fns){ lt_ushort, gt_ushort, ustod };
-		case SDTYPE_UINT:   return (struct sdtype_fns){ lt_uint,   gt_uint,   uitod };
+		case SDTYPE_FLOAT:  return &float_fns;
+		case SDTYPE_DOUBLE: return &double_fns;
+		case SDTYPE_SHORT:  return &short_fns;
+		case SDTYPE_INT:    return &int_fns;
+		case SDTYPE_USHORT: return &ushort_fns;
+		case SDTYPE_UINT:   return &uint_fns;
 	}
-	return (struct sdtype_fns){ NULL, NULL, NULL };
+	return NULL;
 }
 
 /*
@@ -114,21 +121,23 @@ static double normalise(double n, double min, double max)
 
 bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 {
-	char min_samp[MAX_SAMPLE_SZ];
-	char max_samp[MAX_SAMPLE_SZ];
-	struct sdtype_fns fns = select_sdtype_fns(meta->number_type);
+	char min_samp_bytes[MAX_SAMPLE_SZ];
+	char max_samp_bytes[MAX_SAMPLE_SZ];
+	struct sdtype_fns *fns = select_sdtype_fns(meta->number_type);
+	double min_samp, max_samp;
 
-	bzero(min_samp, sizeof(min_samp));
-	bzero(max_samp, sizeof(max_samp));
+	bzero(min_samp_bytes, sizeof(min_samp_bytes));
+	bzero(max_samp_bytes, sizeof(max_samp_bytes));
 
-	if (min_sample(samples, meta->samplesz, n, min_samp, fns.lt) == false)
+	if (min_sample(samples, meta->samplesz, n, min_samp_bytes, fns->lt) == false)
 		return false;
-	if (max_sample(samples, meta->samplesz, n, max_samp, fns.gt) == false)
+	if (max_sample(samples, meta->samplesz, n, max_samp_bytes, fns->gt) == false)
 		return false;
+	min_samp = fns->xtod(min_samp_bytes);
+	max_samp = fns->xtod(max_samp_bytes);
 
 	for (; n--; ++norm) {
-		*norm = normalise(fns.xtod(samples), fns.xtod(min_samp), 
-				  fns.xtod(max_samp));
+		*norm = normalise(fns->xtod(samples), min_samp, max_samp);
 		samples += meta->samplesz;
 	}
 	return true;
@@ -137,10 +146,10 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 bool normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm, bool copy)
 {
 	if (copy) {
-		struct sdtype_fns fns = select_sdtype_fns(meta->number_type);
+		struct sdtype_fns *fns = select_sdtype_fns(meta->number_type);
 
 		for (; n--; ++norm) {
-			*norm = fns.xtod(samples);
+			*norm = fns->xtod(samples);
 			samples += meta->samplesz;
 		}
 		return true;
