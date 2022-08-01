@@ -18,6 +18,7 @@
 #include "math.h"
 
 // All the data required by the guitar tuner.
+// See gtune_init() for info on struct members.
 struct guitar_tuner {
 	fdata_t freq;  // For converting audio input into frequencies.
 	mic_t mic;  // For audio input.
