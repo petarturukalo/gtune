@@ -10,7 +10,7 @@
 #include "sig.h"
 #include "err.h"
 
-gtune_t g;
+gtune_t g = { 0 };
 
 /*
  * cleanup - Clean up the program at exit

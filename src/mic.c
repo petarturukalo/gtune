@@ -77,8 +77,10 @@ void mic_read_until_success(mic_t *m, char *samples, uint readsz)
 
 void mic_cleanup(mic_t *m)
 {
-	Pa_StopStream(m->stream);
-	Pa_CloseStream(m->stream);
-	Pa_Terminate();
+	if (m) {
+		Pa_StopStream(m->stream);
+		Pa_CloseStream(m->stream);
+		Pa_Terminate();
+	}
 }
 

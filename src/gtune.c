@@ -167,9 +167,11 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 
 void gtune_cleanup(gtune_t *g)
 {
-	free(g->samples);
-	mic_cleanup(&g->mic);
-	fdata_free(&g->freq);
+	if (g) {
+		free(g->samples);
+		mic_cleanup(&g->mic);
+		fdata_free(&g->freq);
+	}
 }
 
 static void print_header(void)

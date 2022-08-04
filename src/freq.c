@@ -25,9 +25,11 @@ static void fdata_free_mallocs(fdata_t *f)
 
 void fdata_free(fdata_t *f)
 {
-	fftw_destroy_plan(f->p);
-	fftw_cleanup();
-	fdata_free_mallocs(f);
+	if (f) {
+		fftw_destroy_plan(f->p);
+		fftw_cleanup();
+		fdata_free_mallocs(f);
+	}
 }
 
 bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
