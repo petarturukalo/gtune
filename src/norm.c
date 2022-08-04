@@ -85,7 +85,7 @@ static struct sdtype_fns float_fns  = { lt_float,  gt_float,  ftod };
 static struct sdtype_fns double_fns = { lt_double, gt_double, dtod };
 static struct sdtype_fns short_fns  = { lt_short,  gt_short,  stod };
 static struct sdtype_fns int_fns    = { lt_int,    gt_int,    itod };
-static struct sdtype_fns ushort_fns  = { lt_ushort, gt_ushort, ustod };
+static struct sdtype_fns ushort_fns = { lt_ushort, gt_ushort, ustod };
 static struct sdtype_fns uint_fns   = { lt_uint,   gt_uint,   uitod };
 
 /*
