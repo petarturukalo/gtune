@@ -8,7 +8,7 @@
 /*
  * nmag - Get the number of magnitudes that need to be processed
  */
-int nmag(int chunksz)
+uint nmag(uint chunksz)
 {
 	// Half because the frequency domain output from FFT is mirrored or something,
 	// so only the first half is actually needed for calculations.
@@ -72,38 +72,21 @@ static uint maxi_dbl(double *a, uint n)
 	return mi;
 }
 
-/*
- * process_chunk - Process a chunk of samples into a frequency
- * @samples: samples to process 
- * @meta: metadata describing the numeric data type of a sample. 
- * @skip_normalise: whether to skip normalising the samples because they are already normalised
- *
- * Return the frequency of the samples.
- * Samples are converted to double as that's the required data type input to the implementation 
- * of FFT in use, but the user could have read a different data type, such as signed 16-bit integers, 
- * or 32-bit floats, etc.
- */
-static double process_chunk(fdata_t *f, fftw_plan p, char *samples, sdtype_meta_t *meta,
-			    bool skip_normalise)
+double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise)
 {
 	uint maxi;
-	int m = nmag(f->chunksz);
+	uint m = nmag(f->chunksz);
 	
 	// Generate normalised values, floating point numbers in range -1 to 1, 
 	// which are input for FFT.
 	normalise_samples_copy(samples, f->chunksz, meta, f->norm, skip_normalise);
 	// Preprocess the values further for better and more accurate frequency results.
 	hanning_window(f->norm, f->chunksz);
-	fftw_execute(p);
+	fftw_execute(f->p);
 	// Use output of FFT to prepare for calculating frequency on a subsequent frequency.
 	magnitudes(f->c, f->mag, m);
 	hps(f->mag, f->hps, m, 5);
 	maxi = maxi_dbl(f->hps, m);
 
 	return frequency(f->sample_rate, maxi, f->chunksz);
-}
-
-double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise)
-{
-	return process_chunk(f, f->p, samples, meta, skip_normalise);
 }

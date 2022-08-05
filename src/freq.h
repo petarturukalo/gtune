@@ -48,8 +48,15 @@ void fdata_free(fdata_t *f);
 
 
 /*
- * fdata_process_chunk - Process a chunk of samples for a frequency
- * See process_chunk for more info.
+ * fdata_process_chunk - Process a chunk of samples into a frequency
+ * @samples: samples to process 
+ * @meta: metadata describing the numeric data type of a sample. 
+ * @skip_normalise: whether to skip normalising the samples because they are already normalised
+ *
+ * Return the frequency of the samples.
+ * Samples are converted to double as that's the required data type input to the implementation 
+ * of FFT in use, but the user could have read a different data type, such as signed 16-bit integers, 
+ * or 32-bit floats, etc.
  */
 double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool skip_normalise);
 
