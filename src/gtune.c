@@ -131,9 +131,9 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 
 	norm_assert();
 
-	if (nsteps_valid(chunk_nsteps) == false || chunksz_valid(chunksz) == false ||
-	    frequencies_valid(min_valid_freq, max_valid_freq) == false ||
-	    sample_rate_valid(sample_rate) == false)
+	if (!nsteps_valid(chunk_nsteps) || !chunksz_valid(chunksz) ||
+	    !frequencies_valid(min_valid_freq, max_valid_freq) ||
+	    !sample_rate_valid(sample_rate))
 		return false;
 	stepsz = chunk_stepsz(chunksz, chunk_nsteps);
 	if (stepping_valid(chunk_nsteps, chunksz, stepsz) == false)
