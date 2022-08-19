@@ -50,10 +50,9 @@ extern sdtype_meta_t sdtype_meta_uint32;
  */
 bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm);
 /*
- * Same as normalise_samples but copy the samples directly to the normalised array if copy is true.
- * This is used in cases where the samples array is already normalised.
+ * Copy the samples directly to the normalised array.
  */
-bool normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm, bool copy);
+void normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm);
 
 /*
  * Assert that the normalise functions can be used on this machine.

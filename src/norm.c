@@ -143,18 +143,14 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 	return true;
 }
 
-bool normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm, bool copy)
+void normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 {
-	if (copy) {
-		struct sdtype_fns *fns = select_sdtype_fns(meta->number_type);
+	struct sdtype_fns *fns = select_sdtype_fns(meta->number_type);
 
-		for (; n--; ++norm) {
-			*norm = fns->xtod(samples);
-			samples += meta->samplesz;
-		}
-		return true;
-	} else
-		return normalise_samples(samples, n, meta, norm);
+	for (; n--; ++norm) {
+		*norm = fns->xtod(samples);
+		samples += meta->samplesz;
+	}
 }
 
 sdtype_meta_t sdtype_meta_float32  = { SDTYPE_FLOAT,  sizeof(float) };

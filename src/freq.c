@@ -79,7 +79,10 @@ double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool 
 	
 	// Generate normalised values, floating point numbers in range -1 to 1, 
 	// which are input for FFT.
-	normalise_samples_copy(samples, f->chunksz, meta, f->norm, skip_normalise);
+	if (skip_normalise)
+		normalise_samples_copy(samples, f->chunksz, meta, f->norm);
+	else
+		normalise_samples(samples, f->chunksz, meta, f->norm);
 	// Preprocess the values further for better and more accurate frequency results.
 	hanning_window(f->norm, f->chunksz);
 	fftw_execute(f->p);
