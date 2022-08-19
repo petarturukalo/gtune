@@ -19,12 +19,9 @@
  * @cmp: comparison function comparing whether its first param is better than
  *	its second
  */
-static bool best_sample(char *samples, uint samplesz, uint n, char *out_best,
+static void best_sample(char *samples, uint samplesz, uint n, char *out_best,
 			bool (*cmp)(void *, void *))
 {
-	if (!samples || !samplesz || !n || !out_best || !cmp)
-		return false;
-
 	memcpy(out_best, samples, samplesz);
 	samples += samplesz;
 	while (--n) {
@@ -32,27 +29,26 @@ static bool best_sample(char *samples, uint samplesz, uint n, char *out_best,
 			memcpy(out_best, samples, samplesz);
 		samples += samplesz;
 	}
-	return true;
 }
 
 /*
  * Get the max sample in an array of samples.
  * @lt: function to compare whether a sample is greater than another sample
  */
-static bool max_sample(char *samples, uint samplesz, uint n, char *out_max, 
+static void max_sample(char *samples, uint samplesz, uint n, char *out_max, 
 		       bool (*gt)(void *, void *))
 {
-	return best_sample(samples, samplesz, n, out_max, gt);
+	best_sample(samples, samplesz, n, out_max, gt);
 }
 
 /*
  * Get the min sample in an array of samples.
  * @lt: function to compare whether a sample is less than another sample
  */
-static bool min_sample(char *samples, uint samplesz, uint n, char *out_min, 
+static void min_sample(char *samples, uint samplesz, uint n, char *out_min, 
 		       bool (*lt)(void *, void *))
 {
-	return best_sample(samples, samplesz, n, out_min, lt);
+	best_sample(samples, samplesz, n, out_min, lt);
 }
 
 static bool lt_float(void *a, void *b)  { return *(float *)a < *(float *)b; }
@@ -119,7 +115,7 @@ static double normalise(double n, double min, double max)
 	return nr_new_range(n, min, max, -1, 1);
 }
 
-bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
+void normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 {
 	char min_samp_bytes[MAX_SAMPLE_SZ];
 	char max_samp_bytes[MAX_SAMPLE_SZ];
@@ -129,10 +125,8 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 	bzero(min_samp_bytes, sizeof(min_samp_bytes));
 	bzero(max_samp_bytes, sizeof(max_samp_bytes));
 
-	if (min_sample(samples, meta->samplesz, n, min_samp_bytes, fns->lt) == false)
-		return false;
-	if (max_sample(samples, meta->samplesz, n, max_samp_bytes, fns->gt) == false)
-		return false;
+	min_sample(samples, meta->samplesz, n, min_samp_bytes, fns->lt);
+	max_sample(samples, meta->samplesz, n, max_samp_bytes, fns->gt);
 	min_samp = fns->xtod(min_samp_bytes);
 	max_samp = fns->xtod(max_samp_bytes);
 
@@ -140,7 +134,6 @@ bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm)
 		*norm = normalise(fns->xtod(samples), min_samp, max_samp);
 		samples += meta->samplesz;
 	}
-	return true;
 }
 
 void normalise_samples_copy(char *samples, uint n, sdtype_meta_t *meta, double *norm)

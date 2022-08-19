@@ -48,7 +48,7 @@ extern sdtype_meta_t sdtype_meta_uint32;
  * @norm: out-param array where to store normalised samples. This should be the 
  *	same length as the samples array.
  */
-bool normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm);
+void normalise_samples(char *samples, uint n, sdtype_meta_t *meta, double *norm);
 /*
  * Copy the samples directly to the normalised array.
  */
