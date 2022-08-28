@@ -28,8 +28,7 @@ char *note_alloc(void);
 /*
  * note_from_freq - Get the name of a note from its frequency
  * @freq: frequency of note to get name of
- * @s: string to store note name in. Must have length of at least MAX_NOTE_LEN (preferred it's
- *	also null terminated).
+ * @s: string to store note name in. Must have length of at least MAX_NOTE_LEN 
  */
 void note_from_freq(double freq, char *s);
 
