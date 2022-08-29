@@ -19,13 +19,6 @@
 #define NNOTES 12  
 
 /*
- * note_alloc - Dynamically allocate a buffer to hold a note name for use with note_from_freq.
- *
- * Return must be freed with free. Return NULL on error.
- */
-char *note_alloc(void);
-
-/*
  * note_from_freq - Get the name of a note from its frequency
  * @freq: frequency of note to get name of
  * @s: string to store note name in. Must have length of at least MAX_NOTE_LEN 
