@@ -104,6 +104,8 @@ static bool chunksz_valid(uint chunksz)
  */
 static sdtype_meta_t *pasamplefmt_to_sdtype_meta(PaSampleFormat fmt)
 {
+	PaError samplesz;
+
 	switch (fmt) {
 		case paFloat32:
 			return &sdtype_meta_float32;
@@ -114,7 +116,7 @@ static sdtype_meta_t *pasamplefmt_to_sdtype_meta(PaSampleFormat fmt)
 		// TODO handle other cases. Will need to open up sdtype_meta_t to handle 
 		// other data formats and sizes.
 		default:
-			PaError samplesz = Pa_GetSampleSize(fmt);
+			samplesz = Pa_GetSampleSize(fmt);
 
 			if (samplesz == paSampleFormatNotSupported)
 				eprintf("pulse audio sample format %d: %s", fmt, Pa_GetErrorText(paSampleFormatNotSupported));
