@@ -86,7 +86,7 @@ double fdata_process_chunk(fdata_t *f, char *samples, sdtype_meta_t *meta, bool 
 	// Preprocess the values further for better and more accurate frequency results.
 	hanning_window(f->norm, f->chunksz);
 	fftw_execute(f->p);
-	// Use output of FFT to prepare for calculating frequency on a subsequent frequency.
+	// Use output of FFT to prepare for calculating frequency.
 	magnitudes(f->c, f->mag, m);
 	hps(f->mag, f->hps, m, 5);
 	maxi = maxi_dbl(f->hps, m);
