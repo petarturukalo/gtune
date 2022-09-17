@@ -6,13 +6,13 @@
 #include "mic.h"
 
 /*
- * mic_set_params - Set default parameters for the microphone
- *
+ * Set default parameters for the microphone.
  * Return -1 on couldn't get the default device. Return 0 on success.
  */
 int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 {
-	const PaDeviceInfo *info;
+	const PaDeviceInfo *dev;
+	const PaHostApiInfo *host;
 
 	p->device = Pa_GetDefaultInputDevice();
 
@@ -20,14 +20,13 @@ int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 		eprintf("couldn't get default input device");
 		return -1;
 	}
-	info = Pa_GetDeviceInfo(p->device);
-	// Not a very helpful name since it's just "default",
-	// but print it anyway.
-	printf("using audio input device '%s'\n", info->name);
+	dev = Pa_GetDeviceInfo(p->device);
+	host = Pa_GetHostApiInfo(dev->hostApi);
+	printf("using %s %s audio input device\n", host->name, dev->name);
 
 	p->channelCount = 1;
 	p->sampleFormat = fmt;
-	p->suggestedLatency = info->defaultLowInputLatency;
+	p->suggestedLatency = dev->defaultLowInputLatency;
 	p->hostApiSpecificStreamInfo = NULL;
 	return 0;
 }
