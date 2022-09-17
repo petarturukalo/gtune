@@ -167,7 +167,5 @@ void norm_assert(void)
 	assert(sdtype_meta_uint32.samplesz   == 4);
 
 	assert(MAX_SAMPLE_SZ == sizeof(double));
-	assert(MAX_SAMPLE_SZ == sizeof(long));
-	assert(MAX_SAMPLE_SZ == sizeof(unsigned long));
 }
 
