@@ -138,8 +138,9 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 	    !sample_rate_valid(sample_rate))
 		return false;
 	stepsz = chunk_stepsz(chunksz, chunk_nsteps);
-	if (stepping_valid(chunk_nsteps, chunksz, stepsz) == false)
+	if (!stepping_valid(chunk_nsteps, chunksz, stepsz))
 		return false;
+
 	bzero(g, sizeof(gtune_t));
 	g->chunksz = chunksz;
 	g->chunk_nsteps = chunk_nsteps;
@@ -147,16 +148,16 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 	g->min_valid_freq = min_valid_freq;
 	g->max_valid_freq = max_valid_freq;
 
-	if (fdata_init(&g->freq, sample_rate, chunksz) == false)
+	if (!fdata_init(&g->freq, sample_rate, chunksz))
 		return false;
 	// Set up sample data type before initialising mic since it uses the sample data type.
-	if ((g->meta = pasamplefmt_to_sdtype_meta(fmt)) == NULL ||
-	    (g->samples = malloc(g->chunksz*g->meta->samplesz)) == NULL) {
+	if (!(g->meta = pasamplefmt_to_sdtype_meta(fmt)) ||
+	    !(g->samples = malloc(g->chunksz*g->meta->samplesz))) {
 		fdata_free(&g->freq);
 		return false;
 	}
 	g->pafmt = fmt;
-	if (mic_init(&g->mic, sample_rate, g->chunk_stepsz, fmt) == false) {
+	if (!mic_init(&g->mic, sample_rate, g->chunk_stepsz, fmt)) {
 		fdata_free(&g->freq);
 		free(g->samples);
 		return false;

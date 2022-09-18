@@ -24,6 +24,9 @@ int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 	host = Pa_GetHostApiInfo(dev->hostApi);
 	printf("using %s %s audio input device\n", host->name, dev->name);
 
+	// Use 1 channel for now since multiple will only help with redundancy and getting a note
+	// reading faster unless gtune is refactored to work in parallel, e.g. with threads handling
+	// separate channels.
 	p->channelCount = 1;
 	p->sampleFormat = fmt;
 	p->suggestedLatency = dev->defaultLowInputLatency;

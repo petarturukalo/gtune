@@ -37,10 +37,10 @@ bool fdata_init(fdata_t *f, uint sample_rate, uint chunksz)
 	// Zero the pointers set with malloc so that if one fails those that come
 	// after it can safely be freed because they're already NULL pointers.
 	bzero(f, sizeof(fdata_t));
-	if ((f->norm = malloc(chunksz*sizeof(double))) == NULL ||
-	    (f->c = malloc(chunksz*sizeof(fftw_complex))) == NULL ||
-	    (f->mag = malloc(nmag(chunksz)*sizeof(double))) == NULL ||
-	    (f->hps = malloc(nmag(chunksz)*sizeof(double))) == NULL) {
+	if (!(f->norm = malloc(chunksz*sizeof(double))) ||
+	    !(f->c = malloc(chunksz*sizeof(fftw_complex))) ||
+	    !(f->mag = malloc(nmag(chunksz)*sizeof(double))) ||
+	    !(f->hps = malloc(nmag(chunksz)*sizeof(double)))) {
 		eprintf("failed to init frequency data: %s", strerror(errno));
 		fdata_free_mallocs(f);
 		return false;
