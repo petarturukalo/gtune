@@ -159,9 +159,7 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 		free(g->samples);
 		return false;
 	}
-	// Fill with spaces so that its displayed width becomes MAX_NOTE_LEN, as otherwise 
-	// without if it's filled with null-termination characters its display width is 0.
-	memset(g->note, ' ', MAX_NOTE_LEN);  
+	init_note(g->note);
 	return true;
 }
 

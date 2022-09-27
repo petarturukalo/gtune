@@ -61,6 +61,11 @@ static int note_number(double freq, const char *note, int n)
 	return (note[0] == 'C' && n == 1) ? round(nr) : floor(nr);
 }
 
+void init_note(char *note)
+{
+	memset(note, ' ', MAX_NOTE_LEN);
+}
+
 void note_from_freq(double freq, char *s)
 {
 	int note_ind, note_nr;
@@ -70,8 +75,7 @@ void note_from_freq(double freq, char *s)
 	note = NOTES[note_ind];
 	note_nr = note_number(freq, note, strlen(note));
 
-	// Set to all spaces instead of all 0 so that "A0" and "A#0" (etc.) become the same width.
-	memset(s, ' ', MAX_NOTE_LEN);
+	init_note(s);
 	strcpy(s, note);  // Append note letter.
 	s += strlen(note);
 	*s = '0'+note_nr;  // Append its number.
