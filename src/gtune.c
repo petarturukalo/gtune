@@ -130,6 +130,7 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 		double min_valid_freq, double max_valid_freq, PaSampleFormat fmt)
 {
 	norm_assert();
+	bzero(g, sizeof(gtune_t));
 
 	if (!nsteps_valid(chunk_nsteps) || !chunksz_valid(chunksz) ||
 	    !frequencies_valid(min_valid_freq, max_valid_freq) ||
@@ -139,7 +140,6 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 	if (!stepping_valid(chunk_nsteps, chunksz, g->chunk_stepsz))
 		return false;
 
-	bzero(g, sizeof(gtune_t));
 	g->chunksz = chunksz;
 	g->chunk_nsteps = chunk_nsteps;
 	g->min_valid_freq = min_valid_freq;
