@@ -99,8 +99,7 @@ static void assert_freq_to_note(double freq, char *sln_note)
 	char ans[MAX_NOTE_LEN];
 
 	note_from_freq(freq, ans);
-	/*printf("freq=%f, ans=[%s], sln=[%s]\n", freq, ans, sln_note);*/
-	assert(strcmp(ans, sln_note) == 0);
+	assert(strncmp(ans, sln_note, MAX_NOTE_LEN) == 0);
 }
 
 static void test_freq_to_note(void)
