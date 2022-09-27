@@ -68,7 +68,7 @@ bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps,
 		double min_valid_freq, double max_valid_freq, PaSampleFormat fmt);
 
 /*
- * gtune_free - Clean up and free a guiter tuner allocated with gtune_init
+ * Clean up and free a guiter tuner allocated with gtune_init().
  */
 void gtune_cleanup(gtune_t *g);
 
