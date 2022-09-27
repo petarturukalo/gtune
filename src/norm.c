@@ -33,7 +33,7 @@ static void best_sample(char *samples, uint samplesz, uint n, char *out_best,
 
 /*
  * Get the max sample in an array of samples.
- * @lt: function to compare whether a sample is greater than another sample
+ * @gt: function to compare whether a sample is greater than another sample
  */
 static void max_sample(char *samples, uint samplesz, uint n, char *out_max, 
 		       bool (*gt)(void *, void *))
