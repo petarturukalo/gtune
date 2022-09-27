@@ -29,7 +29,7 @@ typedef struct microphone mic_t;
  * @fmt: pulse audio's description of a sample's data type
  * 
  * Uses the default microphone. Return whether the intialisation was successful. Starts the underlying
- * stream which can be stopped with mic_free (which also cleans up the data structure).
+ * stream which can be stopped with mic_cleanup().
  */
 bool mic_init(mic_t *m, uint sample_rate, uint readsz, PaSampleFormat fmt);
 
