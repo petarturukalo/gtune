@@ -129,8 +129,6 @@ static sdtype_meta_t *pasamplefmt_to_sdtype_meta(PaSampleFormat fmt)
 bool gtune_init(gtune_t *g, uint sample_rate, uint chunksz, uint chunk_nsteps, 
 		double min_valid_freq, double max_valid_freq, PaSampleFormat fmt)
 {
-	uint stepsz;
-
 	norm_assert();
 
 	if (!nsteps_valid(chunk_nsteps) || !chunksz_valid(chunksz) ||
