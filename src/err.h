@@ -13,7 +13,7 @@
 
 /*
  * err_set_prgname - Set the program name so that it shows up
- *	in susbsequent print calls to err_print
+ *	in susbsequent calls to eprintf()
  *
  * @name: program name
  */
