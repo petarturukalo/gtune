@@ -9,7 +9,7 @@
  * Set default parameters for the microphone.
  * Return -1 on couldn't get the default device. Return 0 on success.
  */
-int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
+static bool mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 {
 	const PaDeviceInfo *dev;
 	const PaHostApiInfo *host;
@@ -18,7 +18,7 @@ int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 
 	if (p->device == paNoDevice) {
 		eprintf("couldn't get default input device");
-		return -1;
+		return false;
 	}
 	dev = Pa_GetDeviceInfo(p->device);
 	host = Pa_GetHostApiInfo(dev->hostApi);
@@ -31,7 +31,7 @@ int mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 	p->sampleFormat = fmt;
 	p->suggestedLatency = dev->defaultLowInputLatency;
 	p->hostApiSpecificStreamInfo = NULL;
-	return 0;
+	return true;
 }
 
 bool mic_init(mic_t *m, uint sample_rate, uint readsz, PaSampleFormat fmt)
@@ -45,9 +45,7 @@ bool mic_init(mic_t *m, uint sample_rate, uint readsz, PaSampleFormat fmt)
 		eprintf("couldn't init portaudio: %s", Pa_GetErrorText(err));
 		return false;
 	}
-	err = mic_set_params(&mic_params, fmt);
-
-	if (err == -1) {
+	if (!mic_set_params(&mic_params, fmt)) {
 		Pa_Terminate();
 		return false;
 	}
