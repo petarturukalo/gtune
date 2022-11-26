@@ -11,9 +11,7 @@
 // Frequency (in Hz) of the first note C0.
 #define FIRST_NOTE_FREQ 16.35
 
-static const char *NOTES[] = { 
-	"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"
-};
+static const char *NOTES[] = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
 
 /*
  * semitones_from_note - Get the number of semitones a note is away from another note
