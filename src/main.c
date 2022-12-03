@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	err_set_prgname(argv[0]);
 	sig_block();
 
-	if (gtune_init(&g, 44100, 32768, 4, 20, 1500, paFloat32) == false) {
+	if (!gtune_init(&g, 44100, 32768, 4, 20, 1500, paFloat32)) {
 		eprintf("failed to init gtune");
 		return EXIT_FAILURE;
 	}
