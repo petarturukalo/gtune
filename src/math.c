@@ -11,10 +11,10 @@ double magnitude(fftw_complex c)
 	return sqrt(c[0]*c[0] + c[1]*c[1]);
 }
 
-void magnitudes(fftw_complex *c, double *mags, int n)
+void magnitudes(fftw_complex *c, double *out_magnitudes, int n)
 {
 	for (int i = 0; i < n; ++i) 
-		mags[i] = magnitude(c[i]);
+		out_magnitudes[i] = magnitude(c[i]);
 }
 
 double frequency(int sample_rate, int bin_index, int nbins)
@@ -58,17 +58,17 @@ double nr_new_range(double n, double start, double end, double new_start, double
 	return new_start+nr_prcnt_over_range(n, start, end)*rangelen;
 }
 
-void hps(double *mag, double *h, int len, int n)
+void hps(double *magnitudes, double *out_hps, int len, int n)
 {
 	int ds, end, i;
 
-	memcpy((void *)h, (void *)mag, len*sizeof(double));
+	memcpy(out_hps, magnitudes, len*sizeof(double));
 
 	// Skip downsampling first since already done by memcpy.
 	for (ds = 2; ds <= n; ++ds) {
 		end = len/ds;
 		for (i = 0; i < end; ++i)
-			h[i] *= mag[i*ds];
+			out_hps[i] *= magnitudes[i*ds];
 	}
 }
 

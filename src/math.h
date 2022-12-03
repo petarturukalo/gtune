@@ -20,10 +20,9 @@ double magnitude(fftw_complex c);
 /*
  * magnitudes - Get the magnitudes of multiple complex numbers
  * @c: array of complex numbers
- * @mags: array of magnitudes
  * @n: number of magnitudes to calculate 
  */
-void magnitudes(fftw_complex *c, double *mags, int n);
+void magnitudes(fftw_complex *c, double *out_magnitudes, int n);
 
 /*
  * nr_new_range - Convert a number in a current range to a new range
@@ -47,15 +46,13 @@ double nr_new_range(double n, double start, double end, double new_start, double
 double frequency(int sample_rate, int bin_index, int nbins);
 
 /*
- * hps - Proecss a harmonic product spectrum (HPS) array for finding the fundamental frequency from
- *	a monophonic audio signal with harmonics, such as from playing a single guitar string
- *	note
- * @mag: array of magnitudes 
- * @h: empty harmonic product spectrum array 
+ * Run a harmonic product spectrum (HPS) on magnitudes to ignore harmonics and find the fundamental
+ * frequency of a note.
+ * @out_hps: out-param where hps-processed magnitudes are stored
  * @len: length of both arrays
  * @n: number of times to downsample and largest downsample integer
  */
-void hps(double *mag, double *h, int len, int n);
+void hps(double *magnitudes, double *out_hps, int len, int n);
 
 /*
  * hanning_window - Run a hanning window on an array (in-place)
