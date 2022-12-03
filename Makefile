@@ -19,8 +19,8 @@ clean:
 	rm gtune build/*.o
 
 install:
-	cp -vf gtune /usr/local/bin
+	cp -v gtune /usr/bin
 
 uninstall:
-	rm /usr/local/bin/gtune
+	rm -v /usr/bin/gtune
 
