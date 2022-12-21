@@ -37,6 +37,7 @@ the chunk of samples.
 
 # Demo
 
-Serenade demonstration of the guitar tuner in use.
+Serenade demonstrations of the guitar tuner in use.
 
-https://www.youtube.com/watch?v=3CyOm8BIrVE
+* Desktop: https://www.youtube.com/watch?v=3CyOm8BIrVE
+* Raspberry pi: https://www.youtube.com/watch?v=eBULMfq17UM
