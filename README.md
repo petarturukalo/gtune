@@ -30,7 +30,7 @@ to frequency domain. The input to FFT are the normalised samples and the output 
 of the note and not be tricked by harmonics. This is done since when a guitar string is played it
 produces multiple frequencies, a fundamental frequency, the frequency which can be used to get the
 played note, and harmonic frequencies, multiples of the fundamental frequency (it's why you see
-the A2 note getting picked up and tricked as an A3 near the end of the demo video).
+the A2 note getting picked up and tricked as an A3 near the end of the first demo video).
 6. Use the index of the max value output of the harmonic product spectrum as the frequency of 
 the chunk of samples.
 
