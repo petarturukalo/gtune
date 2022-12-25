@@ -22,10 +22,13 @@ void cleanup(void)
 
 int main(int argc, char *argv[])
 {
+	bool success;
+
 	err_set_prgname(argv[0]);
 	sig_block();
 
-	if (!gtune_init(&g, 44100, 32768, 4, 20, 1500, paFloat32)) {
+	success = gtune_init(&g, 44100, 32768, 4, 20, 1500, paFloat32);
+	if (!success) {
 		eprintf("failed to init gtune");
 		return EXIT_FAILURE;
 	}
