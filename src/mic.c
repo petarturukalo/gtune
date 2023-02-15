@@ -7,7 +7,7 @@
 
 /*
  * Set default parameters for the microphone.
- * Return -1 on couldn't get the default device. Return 0 on success.
+ * Return whether could successfully get the default microphone for setting.
  */
 static bool mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 {
@@ -15,11 +15,8 @@ static bool mic_set_params(PaStreamParameters *p, PaSampleFormat fmt)
 	const PaHostApiInfo *host;
 
 	p->device = Pa_GetDefaultInputDevice();
-
-	if (p->device == paNoDevice) {
-		eprintf("couldn't get default input device");
+	if (p->device == paNoDevice) 
 		return false;
-	}
 	dev = Pa_GetDeviceInfo(p->device);
 	host = Pa_GetHostApiInfo(dev->hostApi);
 	printf("using %s %s audio input device\n", host->name, dev->name);
@@ -40,31 +37,33 @@ bool mic_init(mic_t *m, uint sample_rate, uint readsz, PaSampleFormat fmt)
 	PaStreamParameters mic_params;
 
 	err = Pa_Initialize();
-
 	if (err != paNoError) {
 		eprintf("couldn't init portaudio: %s", Pa_GetErrorText(err));
-		return false;
+		goto mic_init_error0;
 	}
-	if (!mic_set_params(&mic_params, fmt)) {
-		Pa_Terminate();
-		return false;
+	if (!mic_set_params(&mic_params, fmt))  {
+		eprintf("couldn't get default input device");
+		goto mic_init_error1;
 	}
 	err = Pa_OpenStream(&m->stream, &mic_params, NULL, sample_rate, readsz, 
 			    paClipOff, NULL, NULL);
 	if (err != paNoError) {
 		eprintf("couldn't open audio input stream: %s", Pa_GetErrorText(err));
-		Pa_Terminate();
-		return false;
+		goto mic_init_error1;
 	}
 	err = Pa_StartStream(m->stream);
-
 	if (err != paNoError) {
 		eprintf("couldn't start audio input stream: %s", Pa_GetErrorText(err));
-		Pa_CloseStream(m->stream);
-		Pa_Terminate();
-		return false;
+		goto mic_init_error2;
 	}
 	return true;
+
+mic_init_error2:
+	Pa_CloseStream(m->stream);
+mic_init_error1:
+	Pa_Terminate();
+mic_init_error0:
+	return false;
 }
 
 void mic_read_until_success(mic_t *m, char *samples, uint readsz)
