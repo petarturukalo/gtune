@@ -2,10 +2,10 @@ srcs=$(shell find src -name "*.c" -print)
 objs=$(patsubst src/%.c, build/%.o, $(srcs))
 CC=gcc
 CFLAGS=-c -g
-LFLAGS=-lfftw3 -lm -lportaudio
+LDFLAGS=-lfftw3 -lm -lportaudio
 
 gtune: $(objs)
-	$(CC) $^ $(LFLAGS) -o $@
+	$(CC) $^ $(LDFLAGS) -o $@
 
 # All header files reside in the same directory as its corresponding
 # .c file, but might not exist for some files, so use wildcard since it 
