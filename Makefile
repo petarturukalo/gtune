@@ -16,7 +16,7 @@ gtune: $(objs)
 
 clean:
 	find src -name '*.[od]' -print -delete
-	rm -v gtune
+	rm gtune
 
 install:
 	sudo cp -v gtune /usr/bin
