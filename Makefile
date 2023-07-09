@@ -1,26 +1,26 @@
-srcs=$(shell find src -name "*.c" -print)
-objs=$(patsubst src/%.c, build/%.o, $(srcs))
+srcs=$(shell find src -name '*.c' -print)
+objs=$(patsubst %.c, %.o, $(srcs))
+deps=$(patsubst %.o, %.d, $(objs))
 CC=gcc
 CFLAGS=-c -g
 LDLIBS=-lfftw3 -lm -lportaudio
 
+-include $(deps)
+
 gtune: $(objs)
 	$(CC) $^ $(LDLIBS) -o $@
 
-# All header files reside in the same directory as its corresponding
-# .c file, but might not exist for some files, so use wildcard since it 
-# expands to nothing if it doesn't exist.
-.SECONDEXPANSION:
-build/%.o: src/%.c $$(wildcard src/%.h)
-	$(CC) $(CFLAGS) $< -o $@
+%.o: %.c 
+	$(CC) $(CFLAGS) -MMD $< -o $@
 
 
 clean:
-	rm gtune build/*.o
+	find src -name '*.[od]' -print -delete
+	rm -v gtune
 
 install:
-	cp -v gtune /usr/bin
+	sudo cp -v gtune /usr/bin
 
 uninstall:
-	rm -v /usr/bin/gtune
+	sudo rm -v /usr/bin/gtune
 

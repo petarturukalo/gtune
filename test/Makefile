@@ -1,17 +1,18 @@
-# TODO automate collecting object files instead of listing
-OBJS=build/test.o build/test-note.o build/test-math.o build/test-norm.o
+srcs=$(shell find src -name '*.c' -print)
+objs=$(patsubst %.c, %.o, $(srcs))
 # Objects from main source.
-MOBJS=../build/note.o ../build/math.o ../build/norm.o
+MOBJS=../src/note.o ../src/math.o ../src/norm.o
 CC=gcc
 CFLAGS=-c -g
 LFLAGS=-lm -lfftw3
 
-test: $(OBJS)
-	$(CC) $(OBJS) $(MOBJS) $(LFLAGS) -o $@
+test: $(objs)
+	$(CC) $(objs) $(MOBJS) $(LFLAGS) -o $@
 
-build/%.o: src/%.c
+%.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm test build/*.o
+	find src -name '*.o' -print -delete
+	rm -v test 
 
