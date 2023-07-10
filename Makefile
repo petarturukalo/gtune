@@ -3,7 +3,7 @@ objs=$(patsubst %.c, %.o, $(srcs))
 deps=$(patsubst %.o, %.d, $(objs))
 CC=gcc
 CFLAGS=-c -g
-LDLIBS=-lfftw3 -lm -lportaudio
+LDLIBS=-lfftw3 -lm -l:libportaudio.so.2
 
 gtune: $(objs)
 	$(CC) $^ $(LDLIBS) -o $@

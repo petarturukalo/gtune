@@ -9,7 +9,7 @@ and main initialisation for these parameters.
 # Dependent Libraries
 
 * [fftw3](http://fftw.org) for fast Fourier transform (FFT)
-* [portaudio](http://portaudio.com) for audio input
+* [portaudio (V19, API version 2.0)](http://portaudio.com)
 
 
 # Algorithm
