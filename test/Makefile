@@ -14,5 +14,5 @@ test: $(objs)
 
 clean:
 	find src -name '*.o' -print -delete
-	rm -v test 
+	rm test 
 
