@@ -5,10 +5,10 @@ CC=gcc
 CFLAGS=-c -g
 LDLIBS=-lfftw3 -lm -lportaudio
 
--include $(deps)
-
 gtune: $(objs)
 	$(CC) $^ $(LDLIBS) -o $@
+
+-include $(deps)
 
 %.o: %.c 
 	$(CC) $(CFLAGS) -MMD $< -o $@
@@ -17,10 +17,4 @@ gtune: $(objs)
 clean:
 	find src -name '*.[od]' -print -delete
 	rm gtune
-
-install:
-	sudo cp -v gtune /usr/bin
-
-uninstall:
-	sudo rm -v /usr/bin/gtune
 
